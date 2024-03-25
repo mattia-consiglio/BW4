@@ -9,6 +9,7 @@ import team3.entities.EmettitoreEnum;
 import team3.entities.EmettitoreStato;
 import team3.entities.Emettitore;
 import team3.entities.EmettitoreEnum;
+import team3.exceptions.EmettitoreException;
 
 import java.util.function.Supplier;
 
@@ -17,15 +18,21 @@ public class Application {
     private static final EntityManager em = emf.createEntityManager();
 
     public static void main(String[] args) {
-        Supplier<Emettitore> emettitoreSupplier = () -> {
-            EmettitoreEnum tipologia = EmettitoreEnum.values().
-            return new Emettitore();
-        };
+//        Supplier<Emettitore> emettitoreSupplier = () -> {
+//            EmettitoreEnum tipologia = EmettitoreEnum.values().
+//            return new Emettitore();
+//        };
 
         System.out.println("Hello World!");
         EmettitoreDAO ed = new EmettitoreDAO(em);
-        Emettitore emettitore = new Emettitore("nome","via Roma", "20", "Roma", "Roma", "12345", "Italia", EmettitoreEnum.DISTRIBUTORE, EmettitoreStato.ATTIVO);
-        ed.save(emettitore);
+        Emettitore emettitore = null;
+        try {
+            emettitore = new Emettitore("nome","via Roma", "20", "Roma", "Roma", "12345", "Italia", EmettitoreEnum.DISTRIBUTORE, EmettitoreStato.ATTIVO);
+            ed.save(emettitore);
+        } catch (EmettitoreException e) {
+            System.out.println(e.getMessage());
+        }
+
         em.close();
     }
 }

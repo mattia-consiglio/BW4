@@ -1,6 +1,7 @@
 package team3.entities;
 
 import jakarta.persistence.*;
+import team3.exceptions.EmettitoreException;
 
 @Entity
 @Table(name = "emettitori")
@@ -26,7 +27,7 @@ public class Emettitore {
     public Emettitore() {}
 
 
-    public Emettitore(String nome, String via, String civico, String provincia, String citta, String cap, String nazione, EmettitoreEnum tipologia, EmettitoreStato stato) {
+    public Emettitore(String nome, String via, String civico, String provincia, String citta, String cap, String nazione, EmettitoreEnum tipologia, EmettitoreStato stato) throws EmettitoreException {
         this.nome = nome;
         this.via = via;
         this.civico = civico;
@@ -35,6 +36,9 @@ public class Emettitore {
         this.cap = cap;
         this.nazione = nazione;
         this.tipologia = tipologia;
+        if (tipologia == EmettitoreEnum.DISTRIBUTORE && stato == null) {
+            throw new EmettitoreException("è necessario avere uno stato");
+        }
         this.stato = stato;
     }
 
