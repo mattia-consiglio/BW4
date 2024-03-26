@@ -9,10 +9,10 @@ import team3.entities.Mezzo;
 import java.time.LocalDate;
 import java.util.List;
 
-public class MezzoDAO {
+public class MezziDAO {
     private EntityManager em;
 
-    public MezzoDAO(EntityManager em) {
+    public MezziDAO(EntityManager em) {
         this.em = em;
     }
 
@@ -76,5 +76,10 @@ public class MezzoDAO {
         return query.getSingleResult();
     }
 
+
+    public List<Mezzo> getAll() {
+        TypedQuery<Mezzo> query = em.createQuery("SELECT m FROM Mezzo m", Mezzo.class);
+        return query.getResultList();
+    }
 
 }
