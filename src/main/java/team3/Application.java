@@ -5,7 +5,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import team3.dao.EmettitoreDAO;
-import team3.dao.MezzoDAO;
+import team3.dao.MezziDAO;
+import team3.dao.TitoliViaggioDAO;
 import team3.entities.*;
 import team3.exceptions.EmettitoreException;
 
@@ -23,11 +24,13 @@ public class Application {
     private static final Faker faker = new Faker();
 
 
-    private static final EmettitoreDAO emettitoreDAO = new EmettitoreDAO(em);
-    private static final MezzoDAO mezzoDAO = new MezzoDAO(em);
+    private static final EmettitoreDAO emettitoriDAO = new EmettitoreDAO(em);
+    private static final MezziDAO mezziDAO = new MezziDAO(em);
+
+    private static final TitoliViaggioDAO titoliViaggioDAO = new TitoliViaggioDAO(em);
+
 
     public static void main(String[] args) {
-
 
         em.close();
     }
@@ -86,16 +89,19 @@ public class Application {
 
     
 
-    //test pull request with update limitation
+    private static final Supplier<Mezzo> mezzoSupplier = () -> {
+        TipoMezzo tipoMezzo = TipoMezzo.values()[new Random().nextInt(EmettitoreStato.values().length)];
+        return new Mezzo(faker.number().numberBetween(45, 150), tipoMezzo);
+    };
 
-    private static final BigliettoSupplier bigliettoSupplier = (Emettitore emettitore, Mezzo mezzo) -> {
+    private static final BigliettoSupplier bigliettoSupplier = (Emettitore emettitore, List<Mezzo> mezzi) -> {
         LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         boolean vidimato = faker.bool().bool();
         LocalDate dataVidimazione = null;
+        Mezzo mezzo = null;
         if (vidimato) {
             dataVidimazione = dataEmissione.plusDays(faker.number().numberBetween(0, 365));
-        } else {
-            mezzo = null;
+            mezzo = mezzi.get(new Random().nextInt(mezzi.size()));
         }
 
         return new Biglietto(dataEmissione, emettitore, vidimato, dataVidimazione, mezzo);
@@ -104,12 +110,16 @@ public class Application {
 
     private static void fillDatabase() {
 
-        List<Emettitore> emettitoreList = emettitoreDAO.getFirst();
+        // get all Emittitori
+        List<Emettitore> emettitoreList = emettitoriDAO.getAll();
+
+        // add emitori to DB if
         if (emettitoreList.isEmpty()) {
             for (int i = 0; i < 100; i++) {
-                emettitoreDAO.save(emettitoreSupplier.get());
+                emettitoriDAO.save(emettitoreSupplier.get());
             }
         }
+
 
     }
 
