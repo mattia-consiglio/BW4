@@ -5,14 +5,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import team3.dao.EmettitoreDAO;
-import team3.entities.Emettitore;
-import team3.entities.EmettitoreEnum;
-import team3.entities.EmettitoreStato;
 import team3.dao.MezziDAO;
 import team3.dao.TitoliViaggioDAO;
 import team3.entities.*;
 import team3.exceptions.EmettitoreException;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -59,6 +59,7 @@ public class Application {
         }
         return null;
     };
+
     public static int mainMenu(Scanner scanner) {
 
         while (true) {
@@ -82,7 +83,7 @@ public class Application {
 
 
             String option = scanner.nextLine();
-            option =option.trim();
+            option = option.trim();
             switch (option) {
                 case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13": {
                     return Integer.parseInt(option);
@@ -93,7 +94,6 @@ public class Application {
         }
     }
 
-    
 
     private static final Supplier<Mezzo> mezzoSupplier = () -> {
         TipoMezzo tipoMezzo = TipoMezzo.values()[new Random().nextInt(EmettitoreStato.values().length)];
