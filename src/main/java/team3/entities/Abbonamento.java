@@ -13,4 +13,15 @@ public class Abbonamento extends TitoloViaggio {
     @Enumerated(value = EnumType.STRING)
     private TipoAbbonamento tipoAbbonamento;
 
+    public Abbonamento(LocalDate dataEmissione, Emettitore emettitore, LocalDate dataInizio, LocalDate dataFine, TipoAbbonamento tipoAbbonamento, Tessera tessera) {
+        super(dataEmissione, emettitore);
+        this.dataInizio = dataInizio;
+        this.tipoAbbonamento = tipoAbbonamento;
+        if (this.tipoAbbonamento.equals(TipoAbbonamento.SETTIMANALE)) {
+            this.dataFine = this.dataInizio.plusDays(7);
+        } else {
+            this.dataFine = this.dataInizio.plusDays(30);
+        }
+        this.tessera = tessera;
+    }
 }
