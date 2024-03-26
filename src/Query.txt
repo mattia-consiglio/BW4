@@ -1,0 +1,3 @@
+FRANCESCO:
+- countBigliettiVidimatiSuMezzo in MEZZODAO -> QUERY per CONTARE i biglietti che sono stati vidimati su un mezzo in un determinato periodo di tempo
+- countBigliettiVidimatiInGenerale in MEZZODAO -> QUERY per CONTARE tutti i biglietti che sono stati vidimati su tutti i mezzi in un determinato periodo di tempo

@@ -23,8 +23,8 @@ public class Emettitore {
     private EmettitoreStato stato;
 
 
-
-    public Emettitore() {}
+    public Emettitore() {
+    }
 
 
     public Emettitore(String nome, String via, String civico, String provincia, String citta, String cap, String nazione, EmettitoreEnum tipologia, EmettitoreStato stato) throws EmettitoreException {
@@ -46,14 +46,9 @@ public class Emettitore {
         return id;
     }
 
-
-
-
-
     public String getNome() {
         return nome;
     }
-
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -90,8 +85,6 @@ public class Emettitore {
     public EmettitoreStato getStato() {
         return stato;
     }
-
-
 
     public void setVia(String via) {
         this.via = via;

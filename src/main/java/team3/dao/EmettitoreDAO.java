@@ -2,7 +2,11 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+import team3.entities.Biglietto;
 import team3.entities.Emettitore;
+
+import java.util.List;
 
 public class EmettitoreDAO {
     private EntityManager em;
@@ -42,5 +46,10 @@ public class EmettitoreDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public List<Biglietto> getAll() {
+        TypedQuery<Biglietto> query = em.createQuery("SELECT b FROM Biglietto b", Biglietto.class);
+        return query.getResultList();
     }
 }
