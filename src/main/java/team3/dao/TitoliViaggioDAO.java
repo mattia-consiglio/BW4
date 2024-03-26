@@ -2,7 +2,12 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+import team3.entities.Abbonamento;
+import team3.entities.Biglietto;
 import team3.entities.TitoloViaggio;
+
+import java.util.List;
 
 public class TitoliViaggioDAO {
     private final EntityManager em;
@@ -25,8 +30,8 @@ public class TitoliViaggioDAO {
         return query.getResultList();
     }
 
-    public List<Biglietto> getAllAbbonamenti() {
-        TypedQuery<Biglietto> query = em.createQuery("SELECT b FROM Biglietto b", Biglietto.class);
+    public List<Abbonamento> getAllAbbonamenti() {
+        TypedQuery<Abbonamento> query = em.createQuery("SELECT a FROM Abbonamento a", Abbonamento.class);
         return query.getResultList();
     }
 

@@ -4,10 +4,9 @@ import com.github.javafaker.Faker;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import team3.dao.EmettitoreDAO;
-import team3.dao.MezziDAO;
-import team3.dao.TitoliViaggioDAO;
+import team3.dao.*;
 import team3.entities.*;
+import team3.entities.suppliers.*;
 import team3.exceptions.EmettitoreException;
 
 import java.time.LocalDate;
@@ -28,15 +27,19 @@ public class Application {
     private static final MezziDAO mezziDAO = new MezziDAO(em);
 
     private static final TitoliViaggioDAO titoliViaggioDAO = new TitoliViaggioDAO(em);
+    private static final UtentiDAO utentiDAO = new UtentiDAO(em);
+    private static final TessereDAO tessereDAO = new TessereDAO(em);
+
+    private static final StatoMezzoDAO statoMezzoDAO = new StatoMezzoDAO(em);
+
+    private static final TratteDAO tratteDAO = new TratteDAO(em);
+
+
+    private static final MezziTrattaDAO mezziTrattaDAO = new MezziTrattaDAO(em);
 
 
     public static void main(String[] args) {
-        EmettitoreDAO ed = new EmettitoreDAO(em);
-
-        for (int i = 0; i < 100; i++) {
-
-            ed.save(emettitoreSupplier.get());
-        }
+        fillDatabase();
 
         em.close();
     }
@@ -100,7 +103,8 @@ public class Application {
         return new Mezzo(faker.number().numberBetween(45, 150), tipoMezzo);
     };
 
-    private static final BigliettoSupplier bigliettoSupplier = (Emettitore emettitore, List<Mezzo> mezzi) -> {
+    private static final BigliettoSupplier bigliettoSupplier = (List<Emettitore> emettitoreList, List<Mezzo> mezzi) -> {
+        Emettitore emettitore = emettitoreList.get(new Random().nextInt(emettitoreList.size()));
         LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         boolean vidimato = faker.bool().bool();
         LocalDate dataVidimazione = null;
@@ -113,20 +117,135 @@ public class Application {
         return new Biglietto(dataEmissione, emettitore, vidimato, dataVidimazione, mezzo);
     };
 
+    private static final Supplier<Utente> utentiSupplier = () -> {
+        LocalDate dataNascita = faker.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return new Utente(faker.name().firstName(), faker.name().lastName(), dataNascita, faker.address().streetAddress(), faker.address().cityName(), faker.address().city(), faker.address().zipCode(), faker.address().country());
+    };
+
+    private static final TesseraSupplier tesserasupplier = (List<Utente> utenti) -> {
+        Utente utente = utenti.get(new Random().nextInt(utenti.size()));
+        LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return new Tessera(utente, dataEmissione, faker.bool().bool());
+    };
+
+    private static final AbbonamentoSupplier abbonamentoSupplier = (List<Tessera> tessere, List<Emettitore> emettitori) -> {
+        Tessera tessera = tessere.get(new Random().nextInt(tessere.size()));
+        LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Emettitore emettitore = emettitori.get(new Random().nextInt(emettitori.size()));
+        TipoAbbonamento tipoAbbonamento = TipoAbbonamento.values()[new Random().nextInt(TipoAbbonamento.values().length)];
+        return new Abbonamento(dataEmissione, emettitore, tipoAbbonamento, tessera);
+    };
+
+    private static final StatoMezzoSupplier statoMezzoSupplier = (List<Mezzo> mezzi) -> {
+        Mezzo mezzo = mezzi.get(new Random().nextInt(mezzi.size()));
+
+        CondizioneMezzo condizioneMezzo = CondizioneMezzo.values()[new Random().nextInt(CondizioneMezzo.values().length)];
+        LocalDate dataInizio = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dataFine = null;
+        if (condizioneMezzo.equals(CondizioneMezzo.IN_MANUTENZIONE)) {
+
+            dataFine = dataInizio.plusDays(faker.number().numberBetween(1, 30));
+        } else {
+            dataFine = dataInizio.plusDays(faker.number().numberBetween(1, 365));
+
+        }
+        return new StatoMezzo(condizioneMezzo, dataInizio, dataFine, mezzo);
+    };
+
+    public static final Supplier<Tratta> trattaSupplier = () -> {
+        return new Tratta(faker.address().fullAddress(), faker.address().fullAddress(), faker.number().numberBetween(1, 180));
+    };
+
+    public static final MezzoTrattaSupplier mezzoTrattaSupplier = (List<Mezzo> mezzi, List<Tratta> tratte) -> {
+        Tratta tratta = tratte.get(new Random().nextInt(tratte.size()));
+        Mezzo mezzo = mezzi.get(new Random().nextInt(mezzi.size()));
+        return new MezzoTratta(mezzo, tratta, faker.number().numberBetween(1, 180));
+    };
+
 
     private static void fillDatabase() {
+
+        final int dataQuantity = 150;
 
         // get all Emittitori
         List<Emettitore> emettitoreList = emettitoriDAO.getAll();
 
-        // add emitori to DB if
+        // add Emittitori to DB if the list is empty
         if (emettitoreList.isEmpty()) {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < dataQuantity; i++) {
                 emettitoriDAO.save(emettitoreSupplier.get());
+            }
+            emettitoreList = emettitoriDAO.getAll();
+        }
+
+        List<Mezzo> mezzoList = mezziDAO.getAll();
+
+        if (mezzoList.isEmpty()) {
+            for (int i = 0; i < dataQuantity; i++) {
+                mezziDAO.save(mezzoSupplier.get());
+            }
+            mezzoList = mezziDAO.getAll();
+        }
+
+        List<Biglietto> bigliettoList = titoliViaggioDAO.getFirstBiglietto();
+
+        if (bigliettoList.isEmpty()) {
+            for (int i = 0; i < dataQuantity * 3; i++) {
+                titoliViaggioDAO.save(bigliettoSupplier.get(emettitoreList, mezzoList));
             }
         }
 
+        List<Utente> utenteList = utentiDAO.getAll();
 
+        if (utenteList.isEmpty()) {
+            for (int i = 0; i < dataQuantity; i++) {
+                utentiDAO.save(utentiSupplier.get());
+            }
+            utenteList = utentiDAO.getAll();
+        }
+
+        List<Tessera> tesseraList = tessereDAO.getAll();
+
+        if (tesseraList.isEmpty()) {
+            for (int i = 0; i < dataQuantity; i++) {
+                tessereDAO.save(tesserasupplier.get(utenteList));
+            }
+            tesseraList = tessereDAO.getAll();
+        }
+
+        List<Abbonamento> abbonamentoList = titoliViaggioDAO.getAllAbbonamenti();
+
+        if (abbonamentoList.isEmpty()) {
+            for (int i = 0; i < dataQuantity * 2; i++) {
+                titoliViaggioDAO.save(abbonamentoSupplier.get(tesseraList, emettitoreList));
+            }
+        }
+
+        List<StatoMezzo> statoMezzoList = statoMezzoDAO.getAll();
+
+        if (statoMezzoList.isEmpty()) {
+            for (int i = 0; i < dataQuantity * 2; i++) {
+                statoMezzoDAO.save(statoMezzoSupplier.get(mezzoList));
+            }
+        }
+
+        List<Tratta> trattaList = tratteDAO.getAll();
+        if (trattaList.isEmpty()) {
+            for (int i = 0; i < dataQuantity; i++) {
+                tratteDAO.save(trattaSupplier.get());
+            }
+            trattaList = tratteDAO.getAll();
+        }
+
+
+        List<MezzoTratta> mezzoTrattaList = mezziTrattaDAO.getAll();
+        if (mezzoTrattaList.isEmpty()) {
+            for (int i = 0; i < dataQuantity; i++) {
+                mezziTrattaDAO.save(mezzoTrattaSupplier.get(mezzoList, trattaList));
+            }
+        }
     }
 
 }

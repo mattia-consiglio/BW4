@@ -3,6 +3,6 @@
 
 package team3.entities;
 
-public enum CondizioneMezzi {
+public enum CondizioneMezzo {
     IN_MANUTENZIONE, IN_SERVIZIO
 }

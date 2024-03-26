@@ -20,7 +20,7 @@ public class EmettitoreDAO {
             t.begin();
             em.persist(emettitore);
             t.commit();
-            System.out.println("Emettitore inserito");
+            System.out.println("Emettitore inserito: " + emettitore);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
