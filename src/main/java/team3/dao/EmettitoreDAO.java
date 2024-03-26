@@ -3,7 +3,6 @@ package team3.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
-import team3.entities.Biglietto;
 import team3.entities.Emettitore;
 
 import java.util.List;
@@ -48,8 +47,8 @@ public class EmettitoreDAO {
         }
     }
 
-    public List<Biglietto> getAll() {
-        TypedQuery<Biglietto> query = em.createQuery("SELECT b FROM Biglietto b", Biglietto.class);
+    public List<Emettitore> getFirst() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e.id FROM Emettitore e ORDER BY e.id LIMIT 1", Emettitore.class);
         return query.getResultList();
     }
 }
