@@ -1,16 +1,17 @@
 package team3.dao;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 import team3.entities.Biglietto;
 import team3.entities.Mezzo;
-import team3.entities.StatoMezzi;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class MezzoDAO {
     private EntityManager em;
+
     public MezzoDAO(EntityManager em) {
         this.em = em;
     }
@@ -67,12 +68,13 @@ public class MezzoDAO {
     }
 
 
-        //QUERY per CONTARE tutti i biglietti che sono stati vidimati su tutti i mezzi in un determinato periodo di tempo
-    public Long countBigliettiVidimatiInGenerale(LocalDate dataInizio, LocalDate dataFine){
+    //QUERY per CONTARE tutti i biglietti che sono stati vidimati su tutti i mezzi in un determinato periodo di tempo
+    public Long countBigliettiVidimatiInGenerale(LocalDate dataInizio, LocalDate dataFine) {
         TypedQuery<Long> query = em.createQuery("SELECT COUNT(b) FROM Biglietto b WHERE b.vidimato = true AND b.dataVidimazione BETWEEN :dataInizio AND :dataFine", Long.class);
         query.setParameter("dataInizio", dataInizio);
         query.setParameter("dataFine", dataFine);
         return query.getSingleResult();
     }
+
 
 }
