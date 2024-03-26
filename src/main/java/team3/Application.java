@@ -50,6 +50,7 @@ public class Application {
         return null;
     };
 
+    //test pull request with update limitation
 
     private static final BigliettoSupplier bigliettoSupplier = (Emettitore emettitore, Mezzo mezzo) -> {
         LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
