@@ -17,6 +17,20 @@ public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bw4t3");
     private static final EntityManager em = emf.createEntityManager();
     private static final Faker faker = new Faker();
+
+
+    public static void main(String[] args) {
+        EmettitoreDAO ed = new EmettitoreDAO(em);
+
+        for (int i = 0; i < 100; i++) {
+
+            ed.save(emettitoreSupplier.get());
+        }
+
+
+        em.close();
+    }
+
     private static final Supplier<Emettitore> emettitoreSupplier = () -> {
         EmettitoreEnum tipologia = EmettitoreEnum.values()[new Random().nextInt(EmettitoreEnum.values().length)];
         EmettitoreStato stato = null;
@@ -35,25 +49,6 @@ public class Application {
         }
         return null;
     };
+    
 
-    public static void main(String[] args) {
-        EmettitoreDAO ed = new EmettitoreDAO(em);
-
-        for (int i = 0; i < 100; i++) {
-
-            ed.save(emettitoreSupplier.get());
-        }
-
-
-
-       /* try {
-            Emettitore emettitore = new Emettitore("nome","via Roma", "20", "Roma", "Roma", "12345", "Italia", EmettitoreEnum.DISTRIBUTORE, EmettitoreStato.ATTIVO);
-            ed.save(emettitore);
-        } catch (EmettitoreException e) {
-            System.out.println(e.getMessage());
-        }*/
-//        ed.save(emettitoreSupplier.get());
-
-        em.close();
-    }
 }
