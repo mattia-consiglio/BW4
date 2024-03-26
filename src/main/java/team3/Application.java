@@ -16,7 +16,6 @@ import java.util.function.Supplier;
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bw4t3");
     private static final EntityManager em = emf.createEntityManager();
-
     private static final Faker faker = new Faker();
     private static final Supplier<Emettitore> emettitoreSupplier = () -> {
         EmettitoreEnum tipologia = EmettitoreEnum.values()[new Random().nextInt(EmettitoreEnum.values().length)];

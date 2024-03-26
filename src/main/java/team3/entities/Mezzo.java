@@ -3,6 +3,8 @@
 package team3.entities;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "mezzi")
 public class Mezzo {
@@ -22,7 +24,6 @@ public class Mezzo {
     }
 
     // setter e getter
-
     public long getId() {
         return id;
     }
@@ -44,7 +45,6 @@ public class Mezzo {
     }
 
     // toString
-
     @Override
     public String toString() {
         return "Mezzo{" +
@@ -53,4 +53,5 @@ public class Mezzo {
                 ", tipoMezzo=" + tipoMezzo +
                 '}';
     }
+
 }
