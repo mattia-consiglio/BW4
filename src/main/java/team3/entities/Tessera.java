@@ -15,7 +15,7 @@ public class Tessera {
     private LocalDate dataInizio;
     private LocalDate dataFine;
     private boolean validità;
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "id_abbonamento")
     private Abbonamento abbonamento;
 
