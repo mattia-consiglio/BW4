@@ -11,6 +11,7 @@ import team3.entities.EmettitoreStato;
 import team3.exceptions.EmettitoreException;
 
 import java.util.Random;
+import java.util.Scanner;
 import java.util.function.Supplier;
 
 public class Application {
@@ -49,6 +50,40 @@ public class Application {
         }
         return null;
     };
+    public static int mainMenu(Scanner scanner) {
+
+        while (true) {
+            System.out.println("--------- Main menu ---------");
+            System.out.println();
+            System.out.println("Scegli un' opzione");
+            System.out.println("1. Visualizza titoli di viaggio emessi in un periodo di tempo e per punto di emissione");
+            System.out.println("2. Verifica validità abbonamento da numero tessera");
+            System.out.println("3. Visualizza numero biglietti vidimati su un mezzo e in un periodo di tempo");
+            System.out.println("4. Visualizza numero biglietti vidimati su un mezzo");
+            System.out.println("5. Visualizza numero biglietti vidimati in un periodo di tempo");
+            System.out.println("6. Aggiungi titolo di viaggio (biglietto/ abbonamento)");
+            System.out.println("7. Aggiungi emettitore (Rivenditore / Distributore)");
+            System.out.println("8. Aggiungi tessera");
+            System.out.println("9. Aggiungi utente");
+            System.out.println("10. Aggiungi mezzo");
+            System.out.println("11. Imposta stato mezzo");
+            System.out.println("12. Aggiungi tratta");
+            System.out.println("13. Aggiungi tratta percorsa");
+            System.out.println("0. Chiudi");
+
+
+            String option = scanner.nextLine();
+
+            switch (option) {
+                case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13": {
+                    return Integer.parseInt(option);
+                }
+                default:
+                    System.err.println("Opzione non valida, scegliere un'opzione valida");
+            }
+        }
+    }
+
     
 
 }
