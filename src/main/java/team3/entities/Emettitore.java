@@ -117,4 +117,20 @@ public class Emettitore {
     public void setStato(EmettitoreStato stato) {
         this.stato = stato;
     }
+
+    @Override
+    public String toString() {
+        return "Emettitore{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", via='" + via + '\'' +
+                ", civico='" + civico + '\'' +
+                ", provincia='" + provincia + '\'' +
+                ", citta='" + citta + '\'' +
+                ", cap='" + cap + '\'' +
+                ", nazione='" + nazione + '\'' +
+                ", tipologia=" + tipologia +
+                ", stato=" + stato +
+                '}';
+    }
 }

@@ -20,7 +20,7 @@ public class EmettitoreDAO {
             t.begin();
             em.persist(emettitore);
             t.commit();
-            System.out.println("Emettitore inserito");
+            System.out.println("Emettitore inserito: " + emettitore);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -45,11 +45,6 @@ public class EmettitoreDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public List<Emettitore> getFirst() {
-        TypedQuery<Emettitore> query = em.createQuery("SELECT e.id FROM Emettitore e ORDER BY e.id LIMIT 1", Emettitore.class);
-        return query.getResultList();
     }
 
     public List<Emettitore> getAll() {

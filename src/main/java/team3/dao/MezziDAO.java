@@ -22,7 +22,7 @@ public class MezziDAO {
             t.begin();
             em.persist(mezzo);
             t.commit();
-            System.out.println("Mezzo inserito");
+            System.out.println("Mezzo inserito: " + mezzo);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
