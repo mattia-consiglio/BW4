@@ -13,7 +13,6 @@ public class Abbonamento extends TitoloViaggio {
     @JoinColumn(name = "id_tessera")
     private Tessera tessera;
 
-
     public Abbonamento() {
     }
 
