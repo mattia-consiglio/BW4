@@ -1,9 +1,6 @@
 package team3.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 @Entity
@@ -12,10 +9,12 @@ public class Tessera {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long numeroTessera;
+    @ManyToOne
     private Utente utente;
     private LocalDate dataInizio;
     private LocalDate dataFine;
     private boolean validità;
+    @OneToMany
     private Abbonamento abbonamento;
 
     //COSTRUTTORI:
