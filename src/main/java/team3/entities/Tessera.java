@@ -3,6 +3,7 @@ package team3.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+
 @Entity
 public class Tessera {
     //LISTA ATTRIBUTI:
@@ -15,10 +16,12 @@ public class Tessera {
     private LocalDate dataFine;
     private boolean validità;
     @OneToMany
+    @JoinColumn(name = "id_abbonamento")
     private Abbonamento abbonamento;
 
     //COSTRUTTORI:
-    public Tessera() {}
+    public Tessera() {
+    }
 
     public Tessera(Utente utente, Abbonamento abbonamento) {
         this.utente = utente;

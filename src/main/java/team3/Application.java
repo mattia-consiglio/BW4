@@ -5,12 +5,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import team3.dao.EmettitoreDAO;
-import team3.entities.Emettitore;
-import team3.entities.EmettitoreEnum;
-import team3.entities.EmettitoreStato;
+import team3.dao.MezzoDAO;
+import team3.entities.*;
 import team3.exceptions.EmettitoreException;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public class Application {
@@ -19,13 +22,10 @@ public class Application {
     private static final Faker faker = new Faker();
 
 
+    private static final EmettitoreDAO emettitoreDAO = new EmettitoreDAO(em);
+    private static final MezzoDAO mezzoDAO = new MezzoDAO(em);
+
     public static void main(String[] args) {
-        EmettitoreDAO ed = new EmettitoreDAO(em);
-
-        for (int i = 0; i < 100; i++) {
-
-            ed.save(emettitoreSupplier.get());
-        }
 
 
         em.close();
@@ -50,6 +50,30 @@ public class Application {
         return null;
     };
 
-    //test pull request with update limitation
+
+    private static final BigliettoSupplier bigliettoSupplier = (Emettitore emettitore, Mezzo mezzo) -> {
+        LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        boolean vidimato = faker.bool().bool();
+        LocalDate dataVidimazione = null;
+        if (vidimato) {
+            dataVidimazione = dataEmissione.plusDays(faker.number().numberBetween(0, 365));
+        } else {
+            mezzo = null;
+        }
+
+        return new Biglietto(dataEmissione, emettitore, vidimato, dataVidimazione, mezzo);
+    };
+
+
+    private static void fillDatabase() {
+
+        List<Emettitore> emettitoreList = emettitoreDAO.getFirst();
+        if (emettitoreList.isEmpty()) {
+            for (int i = 0; i < 100; i++) {
+                emettitoreDAO.save(emettitoreSupplier.get());
+            }
+        }
+
+    }
 
 }
