@@ -52,4 +52,9 @@ public class EmettitoreDAO {
         TypedQuery<Biglietto> query = em.createQuery("SELECT b FROM Biglietto b", Biglietto.class);
         return query.getResultList();
     }
+
+    public List<Emettitore> getAll() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e", Emettitore.class);
+        return query.getResultList();
+    }
 }

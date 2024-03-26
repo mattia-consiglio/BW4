@@ -19,4 +19,26 @@ public class TitoliViaggioDAO {
         System.out.println("Titolo viaggio  " + titoloViaggio.getId() + " salvato con successo!");
         System.out.println(titoloViaggio);
     }
+
+    public List<Biglietto> getAllBiglietti() {
+        TypedQuery<Biglietto> query = em.createQuery("SELECT b FROM Biglietto b", Biglietto.class);
+        return query.getResultList();
+    }
+
+    public List<Biglietto> getAllAbbonamenti() {
+        TypedQuery<Biglietto> query = em.createQuery("SELECT b FROM Biglietto b", Biglietto.class);
+        return query.getResultList();
+    }
+
+    public List<Biglietto> getFirstBiglietto() {
+        TypedQuery<Biglietto> query = em.createQuery("SELECT b.id FROM Biglietto b ORDER BY b.id LIMIT 1", Biglietto.class);
+        return query.getResultList();
+    }
+
+    public List<Abbonamento> getFirstAbbonamento() {
+        TypedQuery<Abbonamento> query = em.createQuery("SELECT a.id FROM Abbonamento a ORDER BY a.id LIMIT 1", Abbonamento.class);
+        return query.getResultList();
+    }
+
+
 }
