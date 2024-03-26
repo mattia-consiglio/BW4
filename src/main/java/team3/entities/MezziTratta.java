@@ -31,4 +31,45 @@ public class MezziTratta {
         this.tempoPercorrenzaEffettivo = tempoPercorrenzaEffettivo;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Mezzo getMezzo() {
+        return mezzo;
+    }
+
+    public void setMezzo(Mezzo mezzo) {
+        this.mezzo = mezzo;
+    }
+
+    public Tratta getTratta() {
+        return tratta;
+    }
+
+    public void setTratta(Tratta tratta) {
+        this.tratta = tratta;
+    }
+
+    public int getTempoPercorrenzaEffettivo() {
+        return tempoPercorrenzaEffettivo;
+    }
+
+    public void setTempoPercorrenzaEffettivo(int tempoPercorrenzaEffettivo) {
+        this.tempoPercorrenzaEffettivo = tempoPercorrenzaEffettivo;
+    }
+
+    @Override
+    public String toString() {
+        return "MezziTratta{" +
+                "id=" + id +
+                ", mezzo=" + mezzo +
+                ", tratta=" + tratta +
+                ", tempoPercorrenzaEffettivo=" + tempoPercorrenzaEffettivo +
+                '}';
+    }
 }
