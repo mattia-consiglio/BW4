@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "stato_mezzi")
-public class StatoMezzo {
+public class StatoMezzo implements HasId {
     // attributi
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

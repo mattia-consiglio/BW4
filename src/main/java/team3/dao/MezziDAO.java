@@ -52,7 +52,7 @@ public class MezziDAO {
     // --------------------  QUERY -----------------------
 
     //QUERY per ottenere una LISTA tutti i biglietti che sono stati vidimati su un mezzo
-        public List<Biglietto> ListaBigliettiVidimitateSuDeterminatoMezzo(Long idMezzo) {
+    public List<Biglietto> ListaBigliettiVidimitateSuDeterminatoMezzo(Long idMezzo) {
         TypedQuery<Biglietto> list = em.createQuery("SELECT b FROM Biglietto b WHERE b.vidimato = true AND b.mezzo.id = :mezzo", Biglietto.class);
         list.setParameter("mezzo", idMezzo);
         return list.getResultList();

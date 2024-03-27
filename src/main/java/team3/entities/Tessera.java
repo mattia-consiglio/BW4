@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "tessere")
-public class Tessera {
+public class Tessera implements HasId {
     //LISTA ATTRIBUTI:
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -19,6 +19,8 @@ public class Tessera {
 
 
     //COSTRUTTORI:
+    public Tessera() {
+    }
 
 
     public Tessera(Utente utente, LocalDate dataInizio, boolean validita) {

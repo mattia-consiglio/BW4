@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mezzi_tratta")
-public class MezzoTratta {
+public class MezzoTratta implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "id_mezzo")
@@ -31,7 +31,7 @@ public class MezzoTratta {
         this.tempoPercorrenzaEffettivo = tempoPercorrenzaEffettivo;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "titoli_viaggio")
-public abstract class TitoloViaggio {
+public abstract class TitoloViaggio implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected long id;

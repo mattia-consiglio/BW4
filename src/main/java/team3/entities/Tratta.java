@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tratte")
-public class Tratta {
+public class Tratta implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private long id;
 
     @Column(name = "punto_partenza")
     private String puntoPartenza;
@@ -20,7 +20,6 @@ public class Tratta {
     public Tratta() {
     }
 
-    ;
 
     public Tratta(String puntoPartenza, String capolinea, int tempoMedioPercorrenza) {
         this.puntoPartenza = puntoPartenza;
@@ -28,7 +27,7 @@ public class Tratta {
         this.tempoMedioPercorrenza = tempoMedioPercorrenza;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
