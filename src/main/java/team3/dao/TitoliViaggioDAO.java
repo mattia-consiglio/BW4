@@ -7,6 +7,7 @@ import team3.entities.Abbonamento;
 import team3.entities.Biglietto;
 import team3.entities.TitoloViaggio;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class TitoliViaggioDAO {
@@ -53,5 +54,25 @@ public class TitoliViaggioDAO {
 
         List<Abbonamento> abbonamenti = query.getResultList();
         return !abbonamenti.isEmpty(); // se la lista degli abbonamenti non è vuota, significa che c'è almeno un abbonamento valido per la tessera cercata
+    }
+
+    public Long getNumberBigliettiByPeriodo(LocalDate dataInizio, LocalDate dataFine) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(b.id) FROM Biglietto b WHERE b.dataEmissione >= :dataInizio " +
+                        "AND b.dataEmissione <= :dataFine ", Long.class);
+        query.setParameter("dataInizio", dataInizio);
+        query.setParameter("dataFine", dataFine);
+        query.setMaxResults(1);
+        return query.getSingleResult();
+    }
+
+    public Long getNumberAbbonamentiByPeriodo(LocalDate dataInizio, LocalDate dataFine) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(a.id) FROM Abbonamento a WHERE a.dataEmissione >= :dataInizio " +
+                        "AND a.dataEmissione <= :dataFine ", Long.class);
+        query.setParameter("dataInizio", dataInizio);
+        query.setParameter("dataFine", dataFine);
+        query.setMaxResults(1);
+        return query.getSingleResult();
     }
 }
