@@ -49,24 +49,23 @@ public class MezziDAO {
 
     }
 
-    // QUERY
+    // --------------------  QUERY -----------------------
 
-    //QUERY per ottenere tutti i biglietti che sono stati vidimati su un mezzo
-    public List<Biglietto> tessereVidimitateSuDeterminatoMezzo(Mezzo mezzo) {
-        TypedQuery<Biglietto> list = em.createQuery("SELECT p.oggetto FROM Prestito p WHERE p.utente.numeroTessera = :numeroTessera AND p.dataRestituzioneEffettiva IS null", Biglietto.class);
-        list.setParameter("numeroTessera", mezzo);
+    //QUERY per ottenere una LISTA tutti i biglietti che sono stati vidimati su un mezzo
+        public List<Biglietto> ListaBigliettiVidimitateSuDeterminatoMezzo(Long idMezzo) {
+        TypedQuery<Biglietto> list = em.createQuery("SELECT b FROM Biglietto b WHERE b.vidimato = true AND b.mezzo.id = :mezzo", Biglietto.class);
+        list.setParameter("mezzo", idMezzo);
         return list.getResultList();
     }
 
     //QUERY per CONTARE i biglietti che sono stati vidimati su un mezzo in un determinato periodo di tempo
-    public Long countBigliettiVidimatiSuMezzo(Mezzo mezzo, LocalDate dataInizio, LocalDate dataFine) {
-        TypedQuery<Long> query = em.createQuery("SELECT COUNT(b) FROM Biglietto b WHERE b.vidimato = true AND b.mezzo = :mezzo AND b.dataVidimazione BETWEEN :dataInizio AND :dataFine", Long.class);
-        query.setParameter("mezzo", mezzo);
+    public Long countBigliettiVidimatiSuMezzo(Long idMezzo, LocalDate dataInizio, LocalDate dataFine) {
+        TypedQuery<Long> query = em.createQuery("SELECT COUNT(b) FROM Biglietto b WHERE b.vidimato = true AND b.mezzo.id = :mezzo AND b.dataVidimazione BETWEEN :dataInizio AND :dataFine", Long.class);
+        query.setParameter("mezzo", idMezzo);
         query.setParameter("dataInizio", dataInizio);
         query.setParameter("dataFine", dataFine);
         return query.getSingleResult();
     }
-
 
     //QUERY per CONTARE tutti i biglietti che sono stati vidimati su tutti i mezzi in un determinato periodo di tempo
     public Long countBigliettiVidimatiInGenerale(LocalDate dataInizio, LocalDate dataFine) {
