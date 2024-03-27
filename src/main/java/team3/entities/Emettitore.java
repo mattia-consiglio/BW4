@@ -18,7 +18,7 @@ public class Emettitore implements HasId {
     private String cap;
     private String nazione;
     @Enumerated(value = EnumType.STRING)
-    private EmettitoreEnum tipologia;
+    private EmettitoreTipo tipologia;
     @Enumerated(value = EnumType.STRING)
     private EmettitoreStato stato;
 
@@ -27,7 +27,7 @@ public class Emettitore implements HasId {
     }
 
 
-    public Emettitore(String nome, String via, String civico, String provincia, String citta, String cap, String nazione, EmettitoreEnum tipologia, EmettitoreStato stato) throws EmettitoreException {
+    public Emettitore(String nome, String via, String civico, String provincia, String citta, String cap, String nazione, EmettitoreTipo tipologia, EmettitoreStato stato) throws EmettitoreException {
         this.nome = nome;
         this.via = via;
         this.civico = civico;
@@ -36,7 +36,7 @@ public class Emettitore implements HasId {
         this.cap = cap;
         this.nazione = nazione;
         this.tipologia = tipologia;
-        if (tipologia == EmettitoreEnum.DISTRIBUTORE && stato == null) {
+        if (tipologia == EmettitoreTipo.DISTRIBUTORE && stato == null) {
             throw new EmettitoreException("è necessario avere uno stato");
         }
         this.stato = stato;
@@ -78,7 +78,7 @@ public class Emettitore implements HasId {
         return nazione;
     }
 
-    public EmettitoreEnum getTipologia() {
+    public EmettitoreTipo getTipologia() {
         return tipologia;
     }
 
@@ -110,7 +110,7 @@ public class Emettitore implements HasId {
         this.nazione = nazione;
     }
 
-    public void setTipologia(EmettitoreEnum tipologia) {
+    public void setTipologia(EmettitoreTipo tipologia) {
         this.tipologia = tipologia;
     }
 

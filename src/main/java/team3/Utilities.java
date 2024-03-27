@@ -99,6 +99,20 @@ public class Utilities {
         }
     }
 
+    public static String askAndVerifyString(String question, int length) {
+        while (true) {
+            System.out.println(question);
+
+            String string = Application.scanner.nextLine();
+
+            if (string.isEmpty() || string.length() != length) {
+                System.err.println("Inserisci un valore valido");
+            } else {
+                return string;
+            }
+        }
+    }
+
     public static LocalDate askAndVerifyDate(String question) {
         while (true) {
             System.out.println(question);
