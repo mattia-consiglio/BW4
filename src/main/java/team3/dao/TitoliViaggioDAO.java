@@ -45,5 +45,13 @@ public class TitoliViaggioDAO {
         return query.getResultList();
     }
 
+    public boolean isAbbonamentoValidByTesseraNumero(String numeroTessera) {
+        TypedQuery<Abbonamento> query = em.createQuery(
+                "SELECT a FROM Abbonamento a WHERE a.tessera.id = :numeroTessera " + //seleziona gli abbonamenti associati alla tessera con il numero specificato
+                        "AND a.dataFine >= CURRENT_DATE", Abbonamento.class); //verifica se la data di fine dell'abbonamento è maggiore o uguale alla data corrente
+        query.setParameter("numeroTessera", numeroTessera);
 
+        List<Abbonamento> abbonamenti = query.getResultList();
+        return !abbonamenti.isEmpty(); // se la lista degli abbonamenti non è vuota, significa che c'è almeno un abbonamento valido per la tessera cercata
+    }
 }
