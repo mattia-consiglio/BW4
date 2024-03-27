@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "biglietti")
 public class Biglietto extends TitoloViaggio {
+    @Column(nullable = false)
     private boolean vidimato;
     @Column(name = "data_vidimazione")
     private LocalDate dataVidimazione;
