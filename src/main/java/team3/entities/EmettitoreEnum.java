@@ -1,5 +1,5 @@
 package team3.entities;
 
 public enum EmettitoreEnum {
-    DISTRIBUTORE, RIVENDITORE
+    DISTRIBUTORE, RIVENDITORE, ONLINE;
 }
