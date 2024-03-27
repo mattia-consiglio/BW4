@@ -294,6 +294,7 @@ public class Application {
                             break;
                         }
                         case "12": {
+
                             System.out.println("inserisci punto partenza");
                             String puntoPartenza = scanner.nextLine();
                             System.out.println("inserisci capolinea");
