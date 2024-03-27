@@ -33,8 +33,6 @@ public class Application {
 
     public static void main(String[] args) {
         fillDatabase();
-        List<Biglietto> ListaBigliettiVidimitateSuDeterminatoMezzo = mezziDAO.ListaBigliettiVidimitateSuDeterminatoMezzo(111L);
-        System.out.println(ListaBigliettiVidimitateSuDeterminatoMezzo);
         em.close();
     }
 
