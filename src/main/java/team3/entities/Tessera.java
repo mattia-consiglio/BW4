@@ -24,8 +24,10 @@ public class Tessera {
     public Tessera(Utente utente, LocalDate dataInizio, boolean validita) {
         this.utente = utente;
         this.dataInizio = dataInizio;
+
         this.dataFine = LocalDate.now().plusYears(1);
         this.validita = validita;
+
     }
 
     public long getId() {

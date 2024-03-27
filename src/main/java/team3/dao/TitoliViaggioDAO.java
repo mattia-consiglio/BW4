@@ -7,6 +7,7 @@ import team3.entities.Abbonamento;
 import team3.entities.Biglietto;
 import team3.entities.TitoloViaggio;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class TitoliViaggioDAO {
@@ -45,5 +46,33 @@ public class TitoliViaggioDAO {
         return query.getResultList();
     }
 
+    public boolean isAbbonamentoValidByTesseraNumero(String numeroTessera) {
+        TypedQuery<Abbonamento> query = em.createQuery(
+                "SELECT a FROM Abbonamento a WHERE a.tessera.id = :numeroTessera " + //seleziona gli abbonamenti associati alla tessera con il numero specificato
+                        "AND a.dataFine >= CURRENT_DATE", Abbonamento.class); //verifica se la data di fine dell'abbonamento è maggiore o uguale alla data corrente
+        query.setParameter("numeroTessera", numeroTessera);
 
+        List<Abbonamento> abbonamenti = query.getResultList();
+        return !abbonamenti.isEmpty(); // se la lista degli abbonamenti non è vuota, significa che c'è almeno un abbonamento valido per la tessera cercata
+    }
+
+    public Long getNumberBigliettiByPeriodo(LocalDate dataInizio, LocalDate dataFine) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(b.id) FROM Biglietto b WHERE b.dataEmissione >= :dataInizio " +
+                        "AND b.dataEmissione <= :dataFine ", Long.class);
+        query.setParameter("dataInizio", dataInizio);
+        query.setParameter("dataFine", dataFine);
+        query.setMaxResults(1);
+        return query.getSingleResult();
+    }
+
+    public Long getNumberAbbonamentiByPeriodo(LocalDate dataInizio, LocalDate dataFine) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(a.id) FROM Abbonamento a WHERE a.dataEmissione >= :dataInizio " +
+                        "AND a.dataEmissione <= :dataFine ", Long.class);
+        query.setParameter("dataInizio", dataInizio);
+        query.setParameter("dataFine", dataFine);
+        query.setMaxResults(1);
+        return query.getSingleResult();
+    }
 }
