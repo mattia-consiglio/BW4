@@ -25,7 +25,7 @@ public class Tessera {
     public Tessera(Utente utente, LocalDate dataInizio, boolean validità) {
         this.utente = utente;
         this.dataInizio = dataInizio;
-        this.dataFine = LocalDate.now().plusYears(1);
+        this.dataFine = this.dataInizio.plusYears(1);
         this.validità = validità;
     }
 
