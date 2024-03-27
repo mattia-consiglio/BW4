@@ -294,6 +294,29 @@ public class Application {
                             break;
                         }
                         case "12": {
+                            System.out.println("inserisci punto partenza");
+                            String puntoPartenza = scanner.nextLine();
+                            System.out.println("inserisci capolinea");
+                            String capolinea = scanner.nextLine();
+                            System.out.println("inserisci tempo medio di percorrenza in minuti");
+                            int tempoMedioPercorrenza = scanner.nextInt();
+                            Tratta tratta = new Tratta(puntoPartenza, capolinea, tempoMedioPercorrenza);
+
+                        }
+                        case "13": {
+                            List<Mezzo> listaMezzi = mezziDAO.getAll();
+                            System.out.println("scegli id mezzo");
+                            long idMezzo = scanner.nextInt();
+                            Mezzo mezzo = listaMezzi.stream().filter(m -> m.getId() == idMezzo).findFirst().get();
+                            List<Tratta> listaTratte = tratteDAO.getAll();
+                            System.out.println("scegli id tratta");
+                            long idTratta = scanner.nextInt();
+                            Tratta tratta = listaTratte.stream().filter(t -> t.getId() == idTratta).findFirst().get();
+                            System.out.println("inserisci tempo effettivo di percorrenza");
+                            int tempoEffettivoPercorrenza = scanner.nextInt();
+                            MezzoTratta trattaPercorrenza = new MezzoTratta(mezzo, tratta, tempoEffettivoPercorrenza);
+                            mezziTrattaDAO.save(trattaPercorrenza);
+                            break;
 
                         }
                     }
