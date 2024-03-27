@@ -1,19 +1,21 @@
 // @author <FRANCESCO>
 
 package team3.entities;
+
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "stato_mezzi")
-public class StatoMezzi {
+public class StatoMezzo {
     // attributi
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @Column(name = "condizioni_mezzo")
     @Enumerated(EnumType.STRING)
-    private CondizioneMezzi condizioneMezzo;
+    private CondizioneMezzo condizioneMezzo;
     @Column(name = "data_inizio")
     private LocalDate dataInizio;
     @Column(name = "data_fine")
@@ -23,9 +25,10 @@ public class StatoMezzi {
     private Mezzo mezzo;
 
     // costruttore
-    public StatoMezzi() {}
+    public StatoMezzo() {
+    }
 
-    public StatoMezzi(CondizioneMezzi condizioneMezzo, LocalDate dataInizio, LocalDate dataFine, Mezzo mezzo) {
+    public StatoMezzo(CondizioneMezzo condizioneMezzo, LocalDate dataInizio, LocalDate dataFine, Mezzo mezzo) {
         this.condizioneMezzo = condizioneMezzo;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
@@ -37,11 +40,11 @@ public class StatoMezzi {
         return id;
     }
 
-    public CondizioneMezzi getCondizioneMezzo() {
+    public CondizioneMezzo getCondizioneMezzo() {
         return condizioneMezzo;
     }
 
-    public void setCondizioneMezzo(CondizioneMezzi condizioneMezzo) {
+    public void setCondizioneMezzo(CondizioneMezzo condizioneMezzo) {
         this.condizioneMezzo = condizioneMezzo;
     }
 

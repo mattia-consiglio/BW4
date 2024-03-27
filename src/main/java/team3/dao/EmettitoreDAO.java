@@ -2,7 +2,10 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import team3.entities.Emettitore;
+
+import java.util.List;
 
 public class EmettitoreDAO {
     private EntityManager em;
@@ -17,7 +20,7 @@ public class EmettitoreDAO {
             t.begin();
             em.persist(emettitore);
             t.commit();
-            System.out.println("Emettitore inserito");
+            System.out.println("Emettitore inserito: " + emettitore);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -42,5 +45,10 @@ public class EmettitoreDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public List<Emettitore> getAll() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e", Emettitore.class);
+        return query.getResultList();
     }
 }
