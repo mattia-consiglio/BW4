@@ -15,18 +15,17 @@ public class Tessera {
     private Utente utente;
     private LocalDate dataInizio;
     private LocalDate dataFine;
-    private boolean validità;
+    private boolean validita;
 
 
     //COSTRUTTORI:
-    public Tessera() {
-    }
 
-    public Tessera(Utente utente, LocalDate dataInizio, boolean validità) {
+
+    public Tessera(Utente utente, LocalDate dataInizio, boolean validita) {
         this.utente = utente;
         this.dataInizio = dataInizio;
         this.dataFine = LocalDate.now().plusYears(1);
-        this.validità = validità;
+        this.validita = validita;
     }
 
     public long getId() {
@@ -57,12 +56,12 @@ public class Tessera {
         this.dataFine = dataFine;
     }
 
-    public boolean isValidità() {
-        return validità;
+    public boolean isValidita() {
+        return validita;
     }
 
-    public void setValidità(boolean validità) {
-        this.validità = validità;
+    public void setValidita(boolean validita) {
+        this.validita = validita;
     }
 
     @Override
@@ -72,7 +71,7 @@ public class Tessera {
                 ", utente=" + utente +
                 ", dataInizio=" + dataInizio +
                 ", dataFine=" + dataFine +
-                ", validità=" + validità +
+                ", validità=" + validita +
                 '}';
     }
 }
