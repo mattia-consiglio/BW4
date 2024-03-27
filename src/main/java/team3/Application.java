@@ -21,26 +21,20 @@ public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bw4t3");
     private static final EntityManager em = emf.createEntityManager();
     private static final Faker faker = new Faker();
-
-
     private static final EmettitoreDAO emettitoriDAO = new EmettitoreDAO(em);
     private static final MezziDAO mezziDAO = new MezziDAO(em);
-
     private static final TitoliViaggioDAO titoliViaggioDAO = new TitoliViaggioDAO(em);
     private static final UtentiDAO utentiDAO = new UtentiDAO(em);
     private static final TessereDAO tessereDAO = new TessereDAO(em);
-
     private static final StatoMezzoDAO statoMezzoDAO = new StatoMezzoDAO(em);
-
     private static final TratteDAO tratteDAO = new TratteDAO(em);
-
-
     private static final MezziTrattaDAO mezziTrattaDAO = new MezziTrattaDAO(em);
 
 
     public static void main(String[] args) {
         fillDatabase();
-
+        List<Biglietto> ListaBigliettiVidimitateSuDeterminatoMezzo = mezziDAO.ListaBigliettiVidimitateSuDeterminatoMezzo(111L);
+        System.out.println(ListaBigliettiVidimitateSuDeterminatoMezzo);
         em.close();
     }
 
