@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Utente {
+public class Utente implements HasId {
 
     //LISTA ATTRIBUTI:
     @Id

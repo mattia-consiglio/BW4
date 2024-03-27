@@ -16,10 +16,16 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static team3.Utilities.*;
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bw4t3");
     private static final EntityManager em = emf.createEntityManager();
+
+    public static final Scanner scanner = new Scanner(System.in);
     private static final Faker faker = new Faker();
     private static final EmettitoreDAO emettitoriDAO = new EmettitoreDAO(em);
     private static final MezziDAO mezziDAO = new MezziDAO(em);
@@ -29,7 +35,6 @@ public class Application {
     private static final StatoMezzoDAO statoMezzoDAO = new StatoMezzoDAO(em);
     private static final TratteDAO tratteDAO = new TratteDAO(em);
     private static final MezziTrattaDAO mezziTrattaDAO = new MezziTrattaDAO(em);
-    private static final Faker faker = new Faker();
     public static final Supplier<Tratta> trattaSupplier = () -> {
         return new Tratta(faker.address().fullAddress(), faker.address().fullAddress(), faker.number().numberBetween(1, 180));
     };
@@ -113,222 +118,238 @@ public class Application {
     };
 
     public static void main(String[] args) {
+        Logger.getLogger("").setLevel(Level.WARNING);
         fillDatabase();
 
+        mainMenu();
         em.close();
     }
 
-    public static int mainMenu(Scanner scanner) {
+    public static void mainMenu() {
 
         while (true) {
-            System.out.println("--------- Main menu ---------");
+            System.out.println("--------- Menu principale ---------");
             System.out.println();
             System.out.println("Scegli un' opzione");
-            System.out.println("1. sei utente");
-            System.out.println("2. sei amministratore");
+            System.out.println("1. Entra come utente");
+            System.out.println("2. Entra come amministratore");
+            System.out.println("0. Esci dall'applicazione");
+            System.out.println();
 
 
-            String option = scanner.nextLine();
-            option = option.trim();
+            String option = scanner.nextLine().trim();
+
             switch (option) {
                 case "0": {
-                    System.out.println("Chiusura programma in corso...");
-                    break;
+                    System.out.println("Chiusura applicazione in corso...");
+                    return;
                 }
                 case "1": {
 
                 }
                 case "2": {
-                    System.out.println("1. Visualizza titoli di viaggio emessi in un periodo di tempo e per punto di emissione");
-                    System.out.println("2. Verifica validità abbonamento da numero tessera");
-                    System.out.println("3. Visualizza numero biglietti vidimati su un mezzo e in un periodo di tempo");
-                    System.out.println("4. Visualizza numero biglietti vidimati su un mezzo");
-                    System.out.println("5. Visualizza numero biglietti vidimati in un periodo di tempo");
-                    System.out.println("6. Aggiungi titolo di viaggio (biglietto/ abbonamento)");
-                    System.out.println("7. Aggiungi emettitore (Rivenditore / Distributore)");
-                    System.out.println("8. Aggiungi tessera");
-                    System.out.println("9. Aggiungi utente");
-                    System.out.println("10. Aggiungi mezzo");
-                    System.out.println("11. Imposta stato mezzo");
-                    System.out.println("12. Aggiungi tratta");
-                    System.out.println("13. Aggiungi tratta percorsa");
-                    System.out.println("0. Chiudi");
-                    String option2 = scanner.nextLine();
-                    switch (option2) {
-                        case "0": {
-                            System.out.println("Chiusura programma in corso...");
-                            break;
-                        }
-
-                        case "1": {
-                            System.out.println("inserire data inizio");
-                            LocalDate dataInizio = LocalDate.parse(scanner.nextLine());
-                            System.out.println("inserire data fine");
-                            LocalDate dataFine = LocalDate.parse(scanner.nextLine());
-                            System.out.println("inserire punto di emissione");
-                            String puntoEmissione = scanner.nextLine();
-                            break;
-                        }
-                        case "2": {
-                            System.out.println();
-                            System.out.println("Inserire numero tessera");
-                            String numeroTessera = scanner.nextLine();
-                            break;
-                        }
-                        case "3": {
-                            System.out.println("inserire data inizio");
-                            LocalDate dataInizio = LocalDate.parse(scanner.nextLine());
-                            System.out.println("inserire data fine");
-                            LocalDate dataFine = LocalDate.parse(scanner.nextLine());
-                            System.out.println("inserire mezzo");
-                            String mezzo = scanner.nextLine();
-                            break;
-                        }
-                        case "4": {
-                            System.out.println("inserisci tipo di mezzo");
-                            String tipoMezzo = scanner.nextLine();
-                            break;
-                        }
-                        case "5": {
-                            System.out.println("inserire data inizio");
-                            LocalDate dataInizio = LocalDate.parse(scanner.nextLine());
-                            System.out.println("inserire data fine");
-                            LocalDate dataFine = LocalDate.parse(scanner.nextLine());
-                            break;
-                        }
-                        case "6": {
-                            System.out.println("inserire tipo di titolo biglietto/abbonamento");
-                            String tipoTitolo = scanner.nextLine();
-                            if (tipoTitolo.equals("biglietto")) {
-                                //salva biglietto
-                            } else {
-                                //salva abbonamento
-                            }
-                            break;
-
-                        }
-                        case "7": {
-                            System.out.println("inserisci tipo di emettitore rivenditore/distributore");
-                            String tipoEmettitore = scanner.nextLine();
-                            if (tipoEmettitore.equalsIgnoreCase("rivenditore")) {
-                                //salva tipo emettitore rivenditore
-                            } else {
-                                // salva tipo emettitore distributore
-                            }
-                        }
-                        case "8": {
-                            //creazione utente
-                            System.out.println("inserisci nome");
-                            String nome = scanner.nextLine();
-                            System.out.println("inserisci cognome");
-                            String cognome = scanner.nextLine();
-                            System.out.println("inserisci data di nascita");
-                            LocalDate dataNascita = LocalDate.parse(scanner.nextLine());
-                            System.out.println("inserisci via");
-                            String via = scanner.nextLine();
-                            System.out.println("inserisci provincia");
-                            String provincia = scanner.nextLine();
-                            System.out.println("inserisci citta");
-                            String citta = scanner.nextLine();
-                            System.out.println("inserisci cap");
-                            String cap = scanner.nextLine();
-                            System.out.println();
-                            System.out.println("inserisci nazione");
-                            String nazione = scanner.nextLine();
-                            Utente utente = new Utente(nome, cognome, dataNascita, via, provincia, citta, cap, nazione);
-                            //creazione tessera
-                            LocalDate dataInizio = LocalDate.now();
-                            boolean validita = true;
-                            Tessera newtessera = new Tessera(utente, dataInizio, validita);
-                            break;
-                        }
-                        case "9": {
-                            System.out.println("inserisci nome");
-                            String nome = scanner.nextLine();
-                            System.out.println("inserisci cognome");
-                            String cognome = scanner.nextLine();
-                            System.out.println("inserisci data di nascita");
-                            LocalDate dataNascita = LocalDate.parse(scanner.nextLine());
-                            System.out.println("inserisci via");
-                            String via = scanner.nextLine();
-                            System.out.println("inserisci provincia");
-                            String provincia = scanner.nextLine();
-                            System.out.println("inserisci citta");
-                            String citta = scanner.nextLine();
-                            System.out.println("inserisci cap");
-                            String cap = scanner.nextLine();
-                            System.out.println();
-                            System.out.println("inserisci nazione");
-                            String nazione = scanner.nextLine();
-                            Utente utente = new Utente(nome, cognome, dataNascita, via, provincia, citta, cap, nazione);
-                            break;
-                        }
-                        case "10": {
-                            System.out.println("inserisci capienza mezzo");
-                            int capienzaMezzo = scanner.nextInt();
-                            System.out.println("inserisci tipo mezzo autobus/tram");
-                            String tipoMezzo = scanner.nextLine();
-                            TipoMezzo tipoMezzoEnum = TipoMezzo.valueOf(tipoMezzo.toUpperCase());
-                            Mezzo mezzo = new Mezzo(capienzaMezzo, tipoMezzoEnum);
-                            break;
-                        }
-                        case "11": {
-                            //creazione stato mezzo
-                            System.out.println("inserisci lo stato del mezzo nel segente modo in_manutenzione/in_servizio");
-                            String condizioneMezzo = scanner.nextLine();
-                            CondizioneMezzo statoMezzoEnum = CondizioneMezzo.valueOf(condizioneMezzo.toUpperCase());
-                            System.out.println("inserisci la data di inizio");
-                            LocalDate dataInizio = LocalDate.parse(scanner.nextLine());
-                            System.out.println("inserisci la data di fine");
-                            LocalDate dataFine = LocalDate.parse(scanner.nextLine());
-
-                            //creazione del mezzo
-                            System.out.println("inserisci capienza mezzo");
-                            int capienzaMezzo = scanner.nextInt();
-                            System.out.println("inserisci tipo mezzo autobus/tram");
-                            String tipoMezzo = scanner.nextLine();
-                            TipoMezzo tipoMezzoEnum = TipoMezzo.valueOf(tipoMezzo.toUpperCase());
-                            Mezzo mezzo = new Mezzo(capienzaMezzo, tipoMezzoEnum);
-
-                            //creazione stato mezzo
-                            StatoMezzo statoMezzo = new StatoMezzo(statoMezzoEnum, dataInizio, dataFine, mezzo);
-                            break;
-                        }
-                        case "12": {
-
-                            System.out.println("inserisci punto partenza");
-                            String puntoPartenza = scanner.nextLine();
-                            System.out.println("inserisci capolinea");
-                            String capolinea = scanner.nextLine();
-                            System.out.println("inserisci tempo medio di percorrenza in minuti");
-                            int tempoMedioPercorrenza = scanner.nextInt();
-                            Tratta tratta = new Tratta(puntoPartenza, capolinea, tempoMedioPercorrenza);
-
-                        }
-                        case "13": {
-                            List<Mezzo> listaMezzi = mezziDAO.getAll();
-                            System.out.println("scegli id mezzo");
-                            long idMezzo = scanner.nextInt();
-                            Mezzo mezzo = listaMezzi.stream().filter(m -> m.getId() == idMezzo).findFirst().get();
-                            List<Tratta> listaTratte = tratteDAO.getAll();
-                            System.out.println("scegli id tratta");
-                            long idTratta = scanner.nextInt();
-                            Tratta tratta = listaTratte.stream().filter(t -> t.getId() == idTratta).findFirst().get();
-                            System.out.println("inserisci tempo effettivo di percorrenza");
-                            int tempoEffettivoPercorrenza = scanner.nextInt();
-                            MezzoTratta trattaPercorrenza = new MezzoTratta(mezzo, tratta, tempoEffettivoPercorrenza);
-                            mezziTrattaDAO.save(trattaPercorrenza);
-                            break;
-
-                        }
+                    if (!adminMenu()) {
+                        System.out.println("Chiusura applicazione in corso...");
+                        return;
                     }
+
                     break;
                 }
                 default:
                     System.err.println("Opzione non valida, scegliere un'opzione valida");
             }
+        }
+    }
+
+    public static boolean adminMenu() {
+        while (true) {
+            System.out.println();
+            System.out.println("--------- Menu Amministratore ---------");
+            System.out.println();
+            System.out.println("Scegli un' opzione");
+            System.out.println("1. Visualizza titoli di viaggio emessi in un periodo di tempo e per punto di emissione");
+            System.out.println("2. Verifica validità abbonamento da numero tessera");
+            System.out.println("3. Visualizza numero biglietti vidimati su un mezzo e in un periodo di tempo");
+            System.out.println("4. Visualizza numero biglietti vidimati su un mezzo");
+            System.out.println("5. Visualizza numero biglietti vidimati in un periodo di tempo");
+            System.out.println("6. Aggiungi titolo di viaggio (biglietto/ abbonamento)");
+            System.out.println("7. Aggiungi emettitore (Rivenditore / Distributore)");
+            System.out.println("8. Aggiungi tessera");
+            System.out.println("9. Aggiungi utente");
+            System.out.println("10. Aggiungi mezzo");
+            System.out.println("11. Imposta stato mezzo");
+            System.out.println("12. Aggiungi tratta");
+            System.out.println("13. Aggiungi tratta percorsa");
+            System.out.println("0. Torna al menu pricipale");
+            System.out.println("00. Esci dall'applicazione");
+            System.out.println();
+            String option = scanner.nextLine().trim();
+            switch (option) {
+                case "00": {
+                    return false;
+                }
+                case "0": {
+                    return true;
+                }
+
+                case "1": {
+                    System.out.println("inserire data inizio");
+                    LocalDate dataInizio = LocalDate.parse(scanner.nextLine());
+                    System.out.println("inserire data fine");
+                    LocalDate dataFine = LocalDate.parse(scanner.nextLine());
+                    System.out.println("inserire punto di emissione");
+                    String puntoEmissione = scanner.nextLine();
+                    break;
+                }
+                case "2": {
+                    System.out.println();
+                    System.out.println("Inserire numero tessera");
+                    String numeroTessera = scanner.nextLine();
+                    break;
+                }
+                case "3": {
+                    System.out.println("inserire data inizio");
+                    LocalDate dataInizio = LocalDate.parse(scanner.nextLine());
+                    System.out.println("inserire data fine");
+                    LocalDate dataFine = LocalDate.parse(scanner.nextLine());
+                    System.out.println("inserire mezzo");
+                    String mezzo = scanner.nextLine();
+                    break;
+                }
+                case "4": {
+                    System.out.println("inserisci tipo di mezzo");
+                    String tipoMezzo = scanner.nextLine();
+                    break;
+                }
+                case "5": {
+                    System.out.println("inserire data inizio");
+                    LocalDate dataInizio = LocalDate.parse(scanner.nextLine());
+                    System.out.println("inserire data fine");
+                    LocalDate dataFine = LocalDate.parse(scanner.nextLine());
+                    break;
+                }
+                case "6": {
+                    System.out.println("inserire tipo di titolo biglietto/abbonamento");
+                    String tipoTitolo = scanner.nextLine();
+                    if (tipoTitolo.equals("biglietto")) {
+                        //salva biglietto
+                    } else {
+                        //salva abbonamento
+                    }
+                    break;
+
+                }
+                case "7": {
+                    System.out.println("inserisci tipo di emettitore rivenditore/distributore");
+                    String tipoEmettitore = scanner.nextLine();
+                    if (tipoEmettitore.equalsIgnoreCase("rivenditore")) {
+                        //salva tipo emettitore rivenditore
+                    } else {
+                        // salva tipo emettitore distributore
+                    }
+                }
+                case "8": {
+                    //creazione utente
+                    System.out.println("inserisci nome");
+                    String nome = scanner.nextLine();
+                    System.out.println("inserisci cognome");
+                    String cognome = scanner.nextLine();
+                    System.out.println("inserisci data di nascita");
+                    LocalDate dataNascita = LocalDate.parse(scanner.nextLine());
+                    System.out.println("inserisci via");
+                    String via = scanner.nextLine();
+                    System.out.println("inserisci provincia");
+                    String provincia = scanner.nextLine();
+                    System.out.println("inserisci citta");
+                    String citta = scanner.nextLine();
+                    System.out.println("inserisci cap");
+                    String cap = scanner.nextLine();
+                    System.out.println();
+                    System.out.println("inserisci nazione");
+                    String nazione = scanner.nextLine();
+                    Utente utente = new Utente(nome, cognome, dataNascita, via, provincia, citta, cap, nazione);
+                    //creazione tessera
+                    LocalDate dataInizio = LocalDate.now();
+                    boolean validita = true;
+                    Tessera newtessera = new Tessera(utente, dataInizio, validita);
+                    break;
+                }
+                case "9": {
+                    System.out.println("inserisci nome");
+                    String nome = scanner.nextLine();
+                    System.out.println("inserisci cognome");
+                    String cognome = scanner.nextLine();
+                    System.out.println("inserisci data di nascita");
+                    LocalDate dataNascita = LocalDate.parse(scanner.nextLine());
+                    System.out.println("inserisci via");
+                    String via = scanner.nextLine();
+                    System.out.println("inserisci provincia");
+                    String provincia = scanner.nextLine();
+                    System.out.println("inserisci citta");
+                    String citta = scanner.nextLine();
+                    System.out.println("inserisci cap");
+                    String cap = scanner.nextLine();
+                    System.out.println();
+                    System.out.println("inserisci nazione");
+                    String nazione = scanner.nextLine();
+                    Utente utente = new Utente(nome, cognome, dataNascita, via, provincia, citta, cap, nazione);
+                    break;
+                }
+                case "10": {
+
+                    int capienzaMezzo = askAndVerifyInt("Inserisci capienza mezzo");
 
 
+                    TipoMezzo tipoMezzoEnum = askAndVerifyEnum("Scegli tipo mezzo", TipoMezzo.class);
+                    Mezzo mezzo = new Mezzo(capienzaMezzo, tipoMezzoEnum);
+                    mezziDAO.save(mezzo);
+                    break;
+                }
+                case "11": {
+                    //creazione stato mezzo
+
+                    CondizioneMezzo condizioneMezzo = askAndVerifyEnum("Lista dei stati dei mezzi", CondizioneMezzo.class);
+
+                    LocalDate dataInizio = askAndVerifyDate("Inserisci la data di inizio (aaaa-mm-gg)");
+
+                    LocalDate dataFine = askAndVerifyDate("Inserisci la data di fine (aaaa-mm-gg)");
+                    while (dataInizio.isAfter(dataFine)) {
+                        System.out.println("La data di fine deve essere successiva a data di inizio");
+                        dataFine = askAndVerifyDate("Inserisci la data di fine (aaaa-mm-gg)");
+                    }
+
+                    Mezzo mezzo = Utilities.askAndVerifyList("Scegli id mezzo", mezziDAO.getAll(), "Mezzo");
+
+                    //creazione stato mezzo
+                    StatoMezzo statoMezzo = new StatoMezzo(condizioneMezzo, dataInizio, dataFine, mezzo);
+                    statoMezzoDAO.save(statoMezzo);
+                    break;
+                }
+                case "12": {
+
+                    String puntoPartenza = Utilities.askAndVerifyString("Inserisci punto partenza");
+                    String capolinea = Utilities.askAndVerifyString("Inserisci capolinea");
+                    int tempoMedioPercorrenza = Utilities.askAndVerifyInt("Inserisci tempo medio di percorrenza in minuti");
+                    Tratta tratta = new Tratta(puntoPartenza, capolinea, tempoMedioPercorrenza);
+                    tratteDAO.save(tratta);
+
+                    break;
+
+                }
+                case "13": {
+
+                    Mezzo mezzo = Utilities.askAndVerifyList("Scegli id mezzo", mezziDAO.getAll(), "Mezzo");
+                    Tratta tratta = Utilities.askAndVerifyList("Scegli id tratta", tratteDAO.getAll(), "Tratta");
+
+                    int tempoEffettivoPercorrenza = Utilities.askAndVerifyInt("Inserisci tempo effettivo di percorrenza");
+                    MezzoTratta trattaPercorrenza = new MezzoTratta(mezzo, tratta, tempoEffettivoPercorrenza);
+                    mezziTrattaDAO.save(trattaPercorrenza);
+                    break;
+
+                }
+                default:
+                    System.err.println("Opzione non valida, riprova");
+            }
         }
     }
 

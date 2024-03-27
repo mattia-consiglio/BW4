@@ -1,13 +1,12 @@
 // @author <FRANCESCO>
 
 package team3.entities;
-import jakarta.persistence.*;
 
-import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mezzi")
-public class Mezzo {
+public class Mezzo implements HasId {
     // attributi
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,7 +16,9 @@ public class Mezzo {
     private TipoMezzo tipoMezzo;
 
     // costruttore
-    public Mezzo() {}
+    public Mezzo() {
+    }
+
     public Mezzo(int capienza, TipoMezzo tipoMezzo) {
         this.capienza = capienza;
         this.tipoMezzo = tipoMezzo;

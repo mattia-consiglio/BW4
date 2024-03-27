@@ -5,7 +5,7 @@ import team3.exceptions.EmettitoreException;
 
 @Entity
 @Table(name = "emettitori")
-public class Emettitore {
+public class Emettitore implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
