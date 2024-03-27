@@ -51,4 +51,9 @@ public class EmettitoreDAO {
         TypedQuery<Emettitore> query = em.createQuery("SELECT e.id FROM Emettitore e ORDER BY e.id LIMIT 1", Emettitore.class);
         return query.getResultList();
     }
+
+    public List<Emettitore> getAll() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e", Emettitore.class);
+        return query.getResultList();
+    }
 }

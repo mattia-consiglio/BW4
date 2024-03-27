@@ -30,6 +30,11 @@ public class TitoliViaggioDAO {
         return query.getResultList();
     }
 
+    public List<Biglietto> getAllAbbonamenti() {
+        TypedQuery<Biglietto> query = em.createQuery("SELECT b FROM Biglietto b", Biglietto.class);
+        return query.getResultList();
+    }
+
     public List<Biglietto> getFirstBiglietto() {
         TypedQuery<Biglietto> query = em.createQuery("SELECT b.id FROM Biglietto b ORDER BY b.id LIMIT 1", Biglietto.class);
         return query.getResultList();
