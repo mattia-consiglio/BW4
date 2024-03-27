@@ -41,9 +41,6 @@ public class Application {
     public static void main(String[] args) {
         fillDatabase();
 
-        titoliViaggioDAO.getAllBiglietti().forEach(System.out::println);
-//        titoliViaggioDAO.getNumberBigliettyByPeriodo(LocalDate.parse(""))
-
         em.close();
     }
 

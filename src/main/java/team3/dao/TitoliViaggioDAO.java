@@ -56,10 +56,20 @@ public class TitoliViaggioDAO {
         return !abbonamenti.isEmpty(); // se la lista degli abbonamenti non è vuota, significa che c'è almeno un abbonamento valido per la tessera cercata
     }
 
-    public int getNumberBigliettyByPeriodo(LocalDate dataInizio, LocalDate dataFine) {
-        TypedQuery<Integer> query = em.createQuery(
-                "SELECT COUNT(b.id) FROM Biglietto b WHERE b.dataInizio >= :dataInizio " +
-                        "AND b.dataFine <= :dataFine GROUP BY b.id", Integer.class);
+    public Long getNumberBigliettiByPeriodo(LocalDate dataInizio, LocalDate dataFine) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(b.id) FROM Biglietto b WHERE b.dataEmissione >= :dataInizio " +
+                        "AND b.dataEmissione <= :dataFine ", Long.class);
+        query.setParameter("dataInizio", dataInizio);
+        query.setParameter("dataFine", dataFine);
+        query.setMaxResults(1);
+        return query.getSingleResult();
+    }
+
+    public Long getNumberAbbonamentiByPeriodo(LocalDate dataInizio, LocalDate dataFine) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(a.id) FROM Abbonamento a WHERE a.dataEmissione >= :dataInizio " +
+                        "AND a.dataEmissione <= :dataFine ", Long.class);
         query.setParameter("dataInizio", dataInizio);
         query.setParameter("dataFine", dataFine);
         query.setMaxResults(1);
