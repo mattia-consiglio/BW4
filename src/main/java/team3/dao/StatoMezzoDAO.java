@@ -3,6 +3,7 @@ package team3.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
+import team3.entities.Mezzo;
 import team3.entities.StatoMezzo;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class StatoMezzoDAO {
             t.begin();
             em.persist(statoMezzo);
             t.commit();
-            System.out.println("Stato mezzo inserito");
+            System.out.println("Stato mezzo inserito" + statoMezzo);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -49,6 +50,12 @@ public class StatoMezzoDAO {
 
     public List<StatoMezzo> getAll() {
         TypedQuery<StatoMezzo> query = em.createQuery("SELECT s FROM StatoMezzo s", StatoMezzo.class);
+        return query.getResultList();
+    }
+
+    public List<StatoMezzo> getInManutenzione(Mezzo mezzo) {
+        TypedQuery<StatoMezzo> query = em.createQuery("SELECT s FROM StatoMezzo s WHERE s.condizioneMezzo = CondizioneMezzo.IN_MANUTENZIONE AND s.mezzo = :mezzo ORDER BY s.dataInizio DESC", StatoMezzo.class);
+        query.setParameter("mezzo", mezzo);
         return query.getResultList();
     }
 }

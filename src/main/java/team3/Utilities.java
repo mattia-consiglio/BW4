@@ -7,8 +7,10 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static team3.Application.scanner;
+
 public class Utilities {
-    public static <T extends HasId> T askAndVerifyList(String question, List<T> list, String elementName) {
+    public static <T extends HasId> T askAndVerifyList(String question, List<T> list, String elementName, boolean showList) {
         if (elementName == null) {
             elementName = "Element";
         }
@@ -16,7 +18,9 @@ public class Utilities {
             System.err.println("Nessun/a " + elementName + " presente");
             return null;
         }
-        list.forEach(System.out::println);
+        if (showList) {
+            list.forEach(System.out::println);
+        }
         T element = null;
         while (true) {
             System.out.println(question);
@@ -57,6 +61,30 @@ public class Utilities {
             }
         }
     }
+
+    public static <T extends Enum<T>> T askAndVerifyEnum(String question, Class<T> enumClass, int lastEmentsToRemove) {
+        while (true) {
+            System.out.println(question);
+            List<Integer> integers = new ArrayList<>();
+
+            T[] enumElements = enumClass.getEnumConstants();
+            for (int j = 0; j < enumElements.length - lastEmentsToRemove; j++) {
+                System.out.println(j + 1 + ". " + enumElements[j].name());
+                integers.add(j + 1);
+            }
+            try {
+                int output = Integer.parseInt(Application.scanner.nextLine());
+                if (integers.contains(output)) {
+                    return enumClass.getEnumConstants()[output - 1];
+                } else {
+                    System.err.println("Inserisci un numero valido");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Inserisci un numero valido");
+            }
+        }
+    }
+
 
     public static int askAndVerifyInt(String question) {
         while (true) {
@@ -117,17 +145,25 @@ public class Utilities {
         while (true) {
             System.out.println(question);
 
-            String string = Application.scanner.nextLine();
+            String string = scanner.nextLine();
 
             if (string.isEmpty()) {
-                System.err.println("Inserisci un valore valido");
+                System.err.println("Inserisci una data");
             } else {
                 try {
                     return LocalDate.parse(string);
                 } catch (DateTimeParseException e) {
-                    System.err.println("Inserisci una data valida");
+                    System.err.println("Data non valida, riprova");
+                    System.out.println();
                 }
             }
         }
+    }
+
+    public static void pressEnterToContinue() {
+        System.out.println();
+        System.out.println("Premi INVIO per continuare...");
+        scanner.nextLine();
+        System.out.println("Caricamento...");
     }
 }

@@ -27,7 +27,7 @@ public class Application {
 
     public static final Scanner scanner = new Scanner(System.in);
     public static final Faker faker = new Faker();
-    public static final EmettitoreDAO emettitoriDAO = new EmettitoreDAO(em);
+    public static final EmettitoriDAO emettitoriDAO = new EmettitoriDAO(em);
     public static final MezziDAO mezziDAO = new MezziDAO(em);
     public static final TitoliViaggioDAO titoliViaggioDAO = new TitoliViaggioDAO(em);
     public static final UtentiDAO utentiDAO = new UtentiDAO(em);
@@ -44,7 +44,7 @@ public class Application {
         return new MezzoTratta(mezzo, tratta, faker.number().numberBetween(1, 180));
     };
     public static final Supplier<Emettitore> emettitoreSupplier = () -> {
-        EmettitoreTipo tipologia = EmettitoreTipo.values()[new Random().nextInt(EmettitoreTipo.values().length)];
+        EmettitoreTipo tipologia = EmettitoreTipo.values()[new Random().nextInt(EmettitoreTipo.values().length - 1)]; //escudo il tipo ONLINE
         EmettitoreStato stato = null;
         if (tipologia == EmettitoreTipo.DISTRIBUTORE) {
             stato = EmettitoreStato.values()[new Random().nextInt(EmettitoreStato.values().length)];
@@ -66,18 +66,23 @@ public class Application {
         return new Mezzo(faker.number().numberBetween(45, 150), tipoMezzo);
     };
 
-    public static final BigliettoSupplier bigliettoSupplier = (List<Emettitore> emettitoreList, List<Mezzo> mezzi) -> {
+    public static final BigliettoSupplier bigliettoSupplier = (List<Emettitore> emettitoreList, List<Mezzo> mezzi, List<Utente> utenti) -> {
         Emettitore emettitore = emettitoreList.get(new Random().nextInt(emettitoreList.size()));
         LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         boolean vidimato = faker.bool().bool();
         LocalDate dataVidimazione = null;
         Mezzo mezzo = null;
+        Utente utente = null;
         if (vidimato) {
             dataVidimazione = dataEmissione.plusDays(faker.number().numberBetween(0, 365));
             mezzo = mezzi.get(new Random().nextInt(mezzi.size()));
         }
 
-        return new Biglietto(dataEmissione, emettitore, vidimato, dataVidimazione, mezzo);
+        if (emettitore.equals(EmettitoreTipo.ONLINE)) {
+            utente = utenti.get(new Random().nextInt(utenti.size()));
+        }
+
+        return new Biglietto(dataEmissione, emettitore, vidimato, dataVidimazione, mezzo, utente);
     };
 
     public static final Supplier<Utente> utentiSupplier = () -> {
@@ -134,6 +139,11 @@ public class Application {
 
         // add Emittitori to DB if the list is empty
         if (emettitoreList.isEmpty()) {
+            try {
+                emettitoriDAO.save(new Emettitore("Online shop", "", "", "", "", "", "", EmettitoreTipo.ONLINE, null));
+            } catch (EmettitoreException e) {
+                System.err.println(e.getMessage());
+            }
             for (int i = 0; i < dataQuantity; i++) {
                 emettitoriDAO.save(emettitoreSupplier.get());
             }
@@ -149,13 +159,6 @@ public class Application {
             mezzoList = mezziDAO.getAll();
         }
 
-        List<Biglietto> bigliettoList = titoliViaggioDAO.getFirstBiglietto();
-
-        if (bigliettoList.isEmpty()) {
-            for (int i = 0; i < dataQuantity * 3; i++) {
-                titoliViaggioDAO.save(bigliettoSupplier.get(emettitoreList, mezzoList));
-            }
-        }
 
         List<Utente> utenteList = utentiDAO.getAll();
 
@@ -164,6 +167,14 @@ public class Application {
                 utentiDAO.save(utentiSupplier.get());
             }
             utenteList = utentiDAO.getAll();
+        }
+
+        List<Biglietto> bigliettoList = titoliViaggioDAO.getFirstBiglietto();
+
+        if (bigliettoList.isEmpty()) {
+            for (int i = 0; i < dataQuantity * 3; i++) {
+                titoliViaggioDAO.save(bigliettoSupplier.get(emettitoreList, mezzoList, utenteList));
+            }
         }
 
         List<Tessera> tesseraList = tessereDAO.getAll();

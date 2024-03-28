@@ -5,6 +5,7 @@ package team3.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "stato_mezzi")
@@ -75,7 +76,7 @@ public class StatoMezzo implements HasId {
     //toString
     @Override
     public String toString() {
-        return "StatoMezzi{" +
+        return "StatoMezzo{" +
                 "id=" + id +
                 ", condizioneMezzo=" + condizioneMezzo +
                 ", dataInizio=" + dataInizio +
@@ -83,4 +84,12 @@ public class StatoMezzo implements HasId {
                 ", mezzo=" + mezzo +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StatoMezzo that)) return false;
+        return id == that.id && condizioneMezzo == that.condizioneMezzo && Objects.equals(dataInizio, that.dataInizio) && Objects.equals(dataFine, that.dataFine) && Objects.equals(mezzo, that.mezzo);
+    }
+
 }

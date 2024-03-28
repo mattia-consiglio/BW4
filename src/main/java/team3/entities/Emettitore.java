@@ -3,6 +3,8 @@ package team3.entities;
 import jakarta.persistence.*;
 import team3.exceptions.EmettitoreException;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "emettitori")
 public class Emettitore implements HasId {
@@ -133,4 +135,12 @@ public class Emettitore implements HasId {
                 ", stato=" + stato +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Emettitore that)) return false;
+        return id == that.id && Objects.equals(nome, that.nome) && Objects.equals(via, that.via) && Objects.equals(civico, that.civico) && Objects.equals(provincia, that.provincia) && Objects.equals(citta, that.citta) && Objects.equals(cap, that.cap) && Objects.equals(nazione, that.nazione) && tipologia == that.tipologia && stato == that.stato;
+    }
+
 }

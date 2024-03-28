@@ -3,6 +3,8 @@ package team3.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "mezzi_tratta")
@@ -68,4 +70,12 @@ public class MezzoTratta implements HasId {
                 ", tempoPercorrenzaEffettivo=" + tempoPercorrenzaEffettivo +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MezzoTratta that)) return false;
+        return id == that.id && tempoPercorrenzaEffettivo == that.tempoPercorrenzaEffettivo && Objects.equals(mezzo, that.mezzo) && Objects.equals(tratta, that.tratta);
+    }
+
 }

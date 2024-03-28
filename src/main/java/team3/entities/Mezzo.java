@@ -55,4 +55,11 @@ public class Mezzo implements HasId {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Mezzo mezzo)) return false;
+        return id == mezzo.id && capienza == mezzo.capienza && tipoMezzo == mezzo.tipoMezzo;
+    }
+
 }
