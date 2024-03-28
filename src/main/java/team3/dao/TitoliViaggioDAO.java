@@ -2,6 +2,7 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import team3.entities.*;
 
@@ -44,53 +45,76 @@ public class TitoliViaggioDAO {
         return query.getResultList();
     }
 
-    public boolean isAbbonamentoValidByTesseraNumero(String numeroTessera) {
+    public boolean isAbbonamentoValidByTesseraNumero(Tessera tessera) {
         TypedQuery<Abbonamento> query = em.createQuery(
-                "SELECT a FROM Abbonamento a WHERE a.tessera.id = :numeroTessera " + //seleziona gli abbonamenti associati alla tessera con il numero specificato
+                "SELECT a FROM Abbonamento a WHERE a.tessera = :tessera " + //seleziona gli abbonamenti associati alla tessera con il numero specificato
                         "AND a.dataFine >= CURRENT_DATE", Abbonamento.class); //verifica se la data di fine dell'abbonamento è maggiore o uguale alla data corrente
-        query.setParameter("numeroTessera", numeroTessera);
+        query.setParameter("tessera", tessera);
 
         List<Abbonamento> abbonamenti = query.getResultList();
         return !abbonamenti.isEmpty(); // se la lista degli abbonamenti non è vuota, significa che c'è almeno un abbonamento valido per la tessera cercata
     }
 
+    public List<Abbonamento> getAbbonamentiValidiByUser(Utente utente) {
+        TypedQuery<Abbonamento> query = em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera.utente = :utente AND a.dataFine >= CURRENT_DATE ORDER BY a.dataEmissione DESC", Abbonamento.class);
+        query.setParameter("utente", utente);
+        return query.getResultList();
+    }
+
+    public List<Abbonamento> getAbbonamentiByUser(Utente utente) {
+        TypedQuery<Abbonamento> query = em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera.utente = :utente ORDER BY a.dataEmissione DESC", Abbonamento.class);
+        query.setParameter("utente", utente);
+        return query.getResultList();
+    }
+
     public Long getNumberBigliettiByPeriodo(LocalDate dataInizio, LocalDate dataFine, Emettitore emettitore) {
         TypedQuery<Long> query = em.createQuery(
                 "SELECT COUNT(b.id) FROM Biglietto b WHERE b.dataEmissione BETWEEN :dataInizio " +
-                        "AND :dataFine AND b.emettitore.id = :emettitore", Long.class);
+                        "AND :dataFine AND b.emettitore = :emettitore", Long.class);
         query.setParameter("dataInizio", dataInizio);
         query.setParameter("dataFine", dataFine);
-        query.setParameter("emettitore", emettitore.getId());
+        query.setParameter("emettitore", emettitore);
         return query.getSingleResult();
     }
 
     public Long getNumberAbbonamentiByPeriodo(LocalDate dataInizio, LocalDate dataFine, Emettitore emettitore) {
         TypedQuery<Long> query = em.createQuery(
                 "SELECT COUNT(a.id) FROM Abbonamento a WHERE a.dataEmissione BETWEEN :dataInizio " +
-                        "AND :dataFine AND b.emettitore.id = :emettitore", Long.class);
+                        "AND :dataFine AND a.emettitore = :emettitore", Long.class);
         query.setParameter("dataInizio", dataInizio);
         query.setParameter("dataFine", dataFine);
-        query.setParameter("emettitore", emettitore.getId());
+        query.setParameter("emettitore", emettitore);
         return query.getSingleResult();
     }
 
 
     //QUERY per ottenere una LISTA tutti i biglietti che sono stati vidimati su un mezzo
     public List<Biglietto> listaBigliettiVidimitateSuDeterminatoMezzo(Mezzo mezzo) {
-        TypedQuery<Biglietto> list = em.createQuery("SELECT b FROM Biglietto b WHERE b.vidimato = true AND b.mezzo.id = :mezzo", Biglietto.class);
-        list.setParameter("mezzo", mezzo.getId());
+        TypedQuery<Biglietto> list = em.createQuery("SELECT b FROM Biglietto b WHERE b.vidimato = true AND b.mezzo = :mezzo", Biglietto.class);
+        list.setParameter("mezzo", mezzo);
         return list.getResultList();
     }
 
-    //QUERY per ottenere una LISTA tutti i biglietti che sono stati vidimati su un mezzo
-    public Long countBigliettiVidimitateSuDeterminatoMezzo(Mezzo mezzo) {
-        TypedQuery<Long> list = em.createQuery("SELECT COUNT(b) FROM Biglietto b WHERE b.vidimato = true AND b.mezzo.id = :mezzo", Long.class);
-        list.setParameter("mezzo", mezzo.getId());
+    public List<Biglietto> listaBigliettiNonVidimitatiGenerici() {
+        TypedQuery<Biglietto> list = em.createQuery("SELECT b FROM Biglietto b WHERE b.vidimato = false AND b.emettitore.tipologia != EmettitoreTipo.ONLINE", Biglietto.class);
+        return list.getResultList();
+    }
+
+    public List<Biglietto> listaBigliettiNonVidimitatiUtente(Utente utente) {
+        TypedQuery<Biglietto> list = em.createQuery("SELECT b FROM Biglietto b WHERE b.vidimato = false AND b.utente = :utente", Biglietto.class);
+        list.setParameter("utente", utente);
+        return list.getResultList();
+    }
+
+    //QUERY per CONTARE i biglietti che sono stati vidimati su un mezzo
+    public Long countBigliettiVidimitatiSuMezzo(Mezzo mezzo) {
+        TypedQuery<Long> list = em.createQuery("SELECT COUNT(b) FROM Biglietto b WHERE b.vidimato = true AND b.mezzo = :mezzo", Long.class);
+        list.setParameter("mezzo", mezzo);
         return list.getSingleResult();
     }
 
     //QUERY per CONTARE i biglietti che sono stati vidimati su un mezzo in un determinato periodo di tempo
-    public Long countBigliettiVidimatiSuMezzo(Mezzo mezzo, LocalDate dataInizio, LocalDate dataFine) {
+    public Long countBigliettiVidimatiSuMezzoEPeriodo(Mezzo mezzo, LocalDate dataInizio, LocalDate dataFine) {
         TypedQuery<Long> query = em.createQuery("SELECT COUNT(b) FROM Biglietto b WHERE b.vidimato = true AND b.mezzo.id = :mezzo AND b.dataVidimazione BETWEEN :dataInizio AND :dataFine", Long.class);
         query.setParameter("mezzo", mezzo.getId());
         query.setParameter("dataInizio", dataInizio);
@@ -104,5 +128,27 @@ public class TitoliViaggioDAO {
         query.setParameter("dataInizio", dataInizio);
         query.setParameter("dataFine", dataFine);
         return query.getSingleResult();
+    }
+
+    //Query visualizza biglietti acquisti da un utente online
+    public List<Biglietto> getBigliettiAcquistiOnlineByUtente(Utente utente) {
+        TypedQuery<Biglietto> query = em.createQuery("SELECT b FROM Biglietto b WHERE b.utente.id = :utente AND b.emettitore.tipologia = EmettitoreTipo.ONLINE", Biglietto.class);
+        query.setParameter("utente", utente.getId());
+        return query.getResultList();
+    }
+
+    public void updateBiglietto(Biglietto bigliettoModificato) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        Query query = em.createQuery("UPDATE Biglietto b SET b.dataVidimazione = :dataVidimazione, b.mezzo = :mezzo WHERE b.id = :id");
+        query.setParameter("dataVidimazione", bigliettoModificato.getDataVidimazione());
+        query.setParameter("mezzo", bigliettoModificato.getMezzo());
+        query.setParameter("id", bigliettoModificato.getId());
+        if (query.executeUpdate() == 1) {
+            System.out.println("Biglietto vidimato con successo");
+        } else {
+            throw new RuntimeException("Errore durante l'aggiornamento del biglietto");
+        }
+        transaction.commit();
     }
 }

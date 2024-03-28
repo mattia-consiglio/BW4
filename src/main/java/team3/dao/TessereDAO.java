@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 import team3.entities.Tessera;
+import team3.entities.Utente;
 import team3.exceptions.NotFoundException;
 
 import java.util.List;
@@ -54,6 +55,12 @@ public class TessereDAO {
 
     public List<Tessera> getAll() {
         TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t", Tessera.class);
+        return query.getResultList();
+    }
+
+    public List<Tessera> getByUser(Utente utente) {
+        TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t WHERE t.utente = :utente", Tessera.class);
+        query.setParameter("utente", utente);
         return query.getResultList();
     }
 }

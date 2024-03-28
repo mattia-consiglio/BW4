@@ -7,10 +7,10 @@ import team3.entities.Emettitore;
 
 import java.util.List;
 
-public class EmettitoreDAO {
+public class EmettitoriDAO {
     private EntityManager em;
 
-    public EmettitoreDAO(EntityManager em) {
+    public EmettitoriDAO(EntityManager em) {
         this.em = em;
     }
 
@@ -49,6 +49,16 @@ public class EmettitoreDAO {
 
     public List<Emettitore> getAll() {
         TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e", Emettitore.class);
+        return query.getResultList();
+    }
+
+    public List<Emettitore> getAllDistributoriAttivi() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e WHERE e.tipologia = EmettitoreTipo.DISTRIBUTORE AND stato = EmettitoreStato.ATTIVO", Emettitore.class);
+        return query.getResultList();
+    }
+
+    public List<Emettitore> getAllRivenditori() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e WHERE e.tipologia = EmettitoreTipo.RIVENDITORE", Emettitore.class);
         return query.getResultList();
     }
 }

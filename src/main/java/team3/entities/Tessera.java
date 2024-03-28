@@ -3,6 +3,7 @@ package team3.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tessere")
@@ -12,6 +13,7 @@ public class Tessera implements HasId {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @ManyToOne
+    @JoinColumn(name = "id_utente")
     private Utente utente;
     private LocalDate dataInizio;
     private LocalDate dataFine;
@@ -77,5 +79,12 @@ public class Tessera implements HasId {
                 ", dataFine=" + dataFine +
                 ", validità=" + validita +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tessera tessera)) return false;
+        return id == tessera.id && validita == tessera.validita && Objects.equals(utente, tessera.utente) && Objects.equals(dataInizio, tessera.dataInizio) && Objects.equals(dataFine, tessera.dataFine);
     }
 }

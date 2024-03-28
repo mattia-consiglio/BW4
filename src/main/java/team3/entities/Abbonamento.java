@@ -3,6 +3,7 @@ package team3.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Abbonamento extends TitoloViaggio {
@@ -63,4 +64,12 @@ public class Abbonamento extends TitoloViaggio {
                 ", emettitore=" + emettitore +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Abbonamento that)) return false;
+        return Objects.equals(dataFine, that.dataFine) && tipoAbbonamento == that.tipoAbbonamento && Objects.equals(tessera, that.tessera);
+    }
+
 }

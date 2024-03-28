@@ -1,13 +1,14 @@
 package team3.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
+@Table(name = "utenti")
 public class Utente implements HasId {
 
     //LISTA ATTRIBUTI:
@@ -22,6 +23,9 @@ public class Utente implements HasId {
     private String città;
     private String cap;
     private String nazione;
+    @OneToMany(mappedBy = "utente")
+    private List<Tessera> tessere = new ArrayList<>();
+
 
     //COSTRUTTORI:
     public Utente() {
@@ -119,5 +123,12 @@ public class Utente implements HasId {
                 ", cap='" + cap + '\'' +
                 ", nazione='" + nazione + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Utente utente)) return false;
+        return id == utente.id && Objects.equals(nome, utente.nome) && Objects.equals(cognome, utente.cognome) && Objects.equals(dataNascita, utente.dataNascita) && Objects.equals(via, utente.via) && Objects.equals(provincia, utente.provincia) && Objects.equals(città, utente.città) && Objects.equals(cap, utente.cap) && Objects.equals(nazione, utente.nazione) && Objects.equals(tessere, utente.tessere);
     }
 }

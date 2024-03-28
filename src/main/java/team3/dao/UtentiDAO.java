@@ -3,6 +3,7 @@ package team3.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
+import team3.entities.Tessera;
 import team3.entities.Utente;
 import team3.exceptions.NotFoundException;
 
@@ -15,16 +16,18 @@ public class UtentiDAO {
         this.em = em;
     }
 
-    public void save(Utente utente) {
+    public Utente save(Utente utente) {
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.persist(utente);
             transaction.commit();
             System.out.println("Utente " + utente + " salvato!");
+            return utente;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return null;
     }
 
     public Utente findById(long id) {
@@ -62,4 +65,11 @@ public class UtentiDAO {
         TypedQuery<Utente> query = em.createQuery("SELECT u FROM Utente u", Utente.class);
         return query.getResultList();
     }
+
+    public Utente getByTessera(Tessera tessera) {
+        TypedQuery<Utente> query = em.createQuery("SELECT t.utente FROM Tessera t WHERE t.id = :id", Utente.class);
+        query.setParameter("id", tessera.getId());
+        return query.getSingleResult();
+    }
+
 }
