@@ -88,7 +88,7 @@ public class Application {
     public static final Supplier<Utente> utentiSupplier = () -> {
         LocalDate dataNascita = faker.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        return new Utente(faker.name().firstName(), faker.name().lastName(), dataNascita, faker.address().streetAddress(), faker.address().cityName(), faker.address().city(), faker.address().zipCode(), faker.address().country());
+        return new Utente(faker.name().firstName(), faker.name().lastName(), dataNascita, faker.address().streetAddress(), faker.address().cityName(), faker.address().cityName(), faker.address().zipCode(), faker.address().country());
     };
 
     public static final TesseraSupplier tesserasupplier = (List<Utente> utenti) -> {

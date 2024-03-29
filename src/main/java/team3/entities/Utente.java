@@ -20,7 +20,7 @@ public class Utente implements HasId {
     private LocalDate dataNascita;
     private String via;
     private String provincia;
-    private String città;
+    private String citta;
     private String cap;
     private String nazione;
     @OneToMany(mappedBy = "utente")
@@ -31,13 +31,13 @@ public class Utente implements HasId {
     public Utente() {
     }
 
-    public Utente(String nome, String cognome, LocalDate dataNascita, String via, String provincica, String città, String cap, String nazione) {
+    public Utente(String nome, String cognome, LocalDate dataNascita, String via, String provincica, String citta, String cap, String nazione) {
         this.nome = nome;
         this.cognome = cognome;
         this.dataNascita = dataNascita;
         this.via = via;
         this.provincia = provincica;
-        this.città = città;
+        this.citta = citta;
         this.cap = cap;
         this.nazione = nazione;
     }
@@ -86,12 +86,12 @@ public class Utente implements HasId {
         this.provincia = provincia;
     }
 
-    public String getCittà() {
-        return città;
+    public String getCitta() {
+        return citta;
     }
 
-    public void setCittà(String città) {
-        this.città = città;
+    public void setCitta(String citta) {
+        this.citta = citta;
     }
 
     public String getCap() {
@@ -119,7 +119,7 @@ public class Utente implements HasId {
                 ", dataNascita=" + dataNascita +
                 ", via='" + via + '\'' +
                 ", provincia='" + provincia + '\'' +
-                ", città='" + città + '\'' +
+                ", città='" + citta + '\'' +
                 ", cap='" + cap + '\'' +
                 ", nazione='" + nazione + '\'' +
                 '}';
@@ -129,6 +129,6 @@ public class Utente implements HasId {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Utente utente)) return false;
-        return id == utente.id && Objects.equals(nome, utente.nome) && Objects.equals(cognome, utente.cognome) && Objects.equals(dataNascita, utente.dataNascita) && Objects.equals(via, utente.via) && Objects.equals(provincia, utente.provincia) && Objects.equals(città, utente.città) && Objects.equals(cap, utente.cap) && Objects.equals(nazione, utente.nazione) && Objects.equals(tessere, utente.tessere);
+        return id == utente.id && Objects.equals(nome, utente.nome) && Objects.equals(cognome, utente.cognome) && Objects.equals(dataNascita, utente.dataNascita) && Objects.equals(via, utente.via) && Objects.equals(provincia, utente.provincia) && Objects.equals(citta, utente.citta) && Objects.equals(cap, utente.cap) && Objects.equals(nazione, utente.nazione) && Objects.equals(tessere, utente.tessere);
     }
 }

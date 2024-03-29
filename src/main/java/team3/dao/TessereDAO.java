@@ -72,7 +72,7 @@ public class TessereDAO {
         query.setParameter("id", tessera.getId());
 
         if (query.executeUpdate() == 1) {
-            System.out.println("Tessera invalidata con successo");
+            System.out.println("Tessera " + tessera + " invalidata con successo");
         } else {
             throw new RuntimeException("Errore durante l'invalidamento della tessera");
         }
@@ -88,9 +88,10 @@ public class TessereDAO {
         query.setParameter("dataFine", tessera.getDataFine());
 
         if (query.executeUpdate() == 1) {
-            System.out.println("Tessera invalidata con successo");
+            System.out.println("Tessera " + tessera + " rinnovata con successo");
+            System.out.println(tessera);
         } else {
-            throw new RuntimeException("Errore durante l'invalidamento della tessera");
+            throw new RuntimeException("Errore durante il rinnovo della tessera");
         }
         transaction.commit();
     }

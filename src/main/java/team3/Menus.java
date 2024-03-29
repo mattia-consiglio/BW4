@@ -509,14 +509,17 @@ public class Menus {
                     tessera.rinnova();
                     tessereDAO.rinnova(tessera);
 
+                    pressEnterToContinue();
                     break;
                 }
                 case "16": {
                     Tessera tesseraDaInvalidare = Utilities.askAndVerifyList("Scegli id tessera da invalidare", Application.tessereDAO.getValid(), "Tessera", true);
                     assert tesseraDaInvalidare != null;
                     tessereDAO.invalida(tesseraDaInvalidare);
+
                     Tessera newTessera = new Tessera(tesseraDaInvalidare.getUtente(), LocalDate.now(), true);
                     tessereDAO.save(newTessera);
+                    pressEnterToContinue();
                     break;
                 }
                 case "17": {
@@ -529,11 +532,14 @@ public class Menus {
                     utente.setCognome(askAndVerifyString("Inserisci nuovo cognome"));
                     utente.setDataNascita(askAndVerifyDate("Inserisci nuova data di nascita (aaaa-mm-gg)"));
                     utente.setVia(askAndVerifyString("Inserisci nuova via"));
-                    utente.setCittà(askAndVerifyString("Inserisci nuova citta"));
+                    utente.setCitta(askAndVerifyString("Inserisci nuova citta"));
                     utente.setProvincia(askAndVerifyString("Inserisci nuova provincia"));
                     utente.setCap(askAndVerifyString("Inserisci nuovo cap", 5));
                     utente.setNazione(askAndVerifyString("Inserisci nuova nazione"));
 
+                    utentiDAO.update(utente);
+
+                    pressEnterToContinue();
                     break;
                 }
 
@@ -543,7 +549,7 @@ public class Menus {
                     System.out.println("Stato mezzo scelto");
                     System.out.println(statoMezzo);
                     statoMezzo.setDataFine(askAndVerifyDate("Inserisci nuova data di fine (aaaa-mm-gg)"));
-
+                    statoMezzoDAO.updateDataFine(statoMezzo);
                     pressEnterToContinue();
                     break;
                 }
@@ -556,7 +562,7 @@ public class Menus {
                     tratta.setPuntoPartenza(askAndVerifyString("Inserisci nuovo punto di partenza"));
                     tratta.setCapolinea(askAndVerifyString("Inserisci nuova capolinea"));
                     tratta.setTempoMedioPercorrenza(askAndVerifyInt("Inserisci nuovo tempo medio di percorrenza in minuti"));
-
+                    tratteDAO.update(tratta);
                     pressEnterToContinue();
                     break;
                 }
@@ -566,10 +572,10 @@ public class Menus {
                     System.out.println("Emettitore scelto");
                     System.out.println(emettitore);
                     emettitore.setNome(askAndVerifyString("Inserisci nuovo nome"));
-                    if (emettitore.equals(EmettitoreTipo.DISTRIBUTORE)) {
+                    if (emettitore.getTipologia().equals(EmettitoreTipo.DISTRIBUTORE)) {
                         emettitore.setStato(askAndVerifyEnum("Inserisci nuovo stato", EmettitoreStato.class));
                     }
-
+                    emettitoriDAO.update(emettitore);
 
                     pressEnterToContinue();
                     break;
@@ -592,7 +598,7 @@ public class Menus {
                 case "23": {
                     Mezzo mezzo = Utilities.askAndVerifyList("Scegli id mezzo da contrassegnare eliminato", Application.mezziDAO.getAll(), "Mezzo", true);
                     assert mezzo != null;
-                    
+
                     pressEnterToContinue();
                     break;
                 }
