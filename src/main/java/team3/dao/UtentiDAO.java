@@ -83,8 +83,8 @@ public class UtentiDAO {
             Utente found = em.find(Utente.class, utente.getId());
             if (found != null) {
                 // abbonamento
-                Query queryAbbonamenti = em.createQuery("UPDATE Abbonamento a SET a.tessera.utente = null WHERE a.tessera.utente.id = :id");
-                queryAbbonamenti.setParameter("utente", utente);
+                Query queryAbbonamenti = em.createQuery("UPDATE Abbonamento a SET a.tessera = null WHERE a.tessera.utente.id = :id");
+                queryAbbonamenti.setParameter("id", utente.getId());
                 queryAbbonamenti.executeUpdate();
 
                 // tessera
