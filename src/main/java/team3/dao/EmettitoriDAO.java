@@ -30,6 +30,7 @@ public class EmettitoriDAO {
         return em.find(Emettitore.class, id);
     }
 
+    // PER ELIMINARE EMETTITORE
     public void findByIdAndDelete(long id) {
         try {
             EntityTransaction t = em.getTransaction();
