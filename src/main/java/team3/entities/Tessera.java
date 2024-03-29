@@ -29,9 +29,14 @@ public class Tessera implements HasId {
         this.utente = utente;
         this.dataInizio = dataInizio;
 
-        this.dataFine = LocalDate.now().plusYears(1);
+        this.dataFine = dataInizio.plusYears(1);
         this.validita = validita;
 
+    }
+
+    public void rinnova() {
+        this.dataInizio = LocalDate.now();
+        this.dataFine = LocalDate.now().plusYears(1);
     }
 
     public long getId() {

@@ -88,12 +88,12 @@ public class Application {
     public static final Supplier<Utente> utentiSupplier = () -> {
         LocalDate dataNascita = faker.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        return new Utente(faker.name().firstName(), faker.name().lastName(), dataNascita, faker.address().streetAddress(), faker.address().cityName(), faker.address().city(), faker.address().zipCode(), faker.address().country());
+        return new Utente(faker.name().firstName(), faker.name().lastName(), dataNascita, faker.address().streetAddress(), faker.address().cityName(), faker.address().cityName(), faker.address().zipCode(), faker.address().country());
     };
 
     public static final TesseraSupplier tesserasupplier = (List<Utente> utenti) -> {
         Utente utente = utenti.get(new Random().nextInt(utenti.size()));
-        LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dataEmissione = faker.date().past(700, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         return new Tessera(utente, dataEmissione, faker.bool().bool());
     };

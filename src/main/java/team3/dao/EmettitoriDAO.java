@@ -62,4 +62,16 @@ public class EmettitoriDAO {
         TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e WHERE e.tipologia = EmettitoreTipo.RIVENDITORE", Emettitore.class);
         return query.getResultList();
     }
+
+    public void update(Emettitore emettitore) {
+        try {
+            EntityTransaction t = em.getTransaction();
+            t.begin();
+            em.merge(emettitore);
+            t.commit();
+            System.out.println("Emettitore modificato: " + emettitore);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }

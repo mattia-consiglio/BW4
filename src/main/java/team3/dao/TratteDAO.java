@@ -29,4 +29,16 @@ public class TratteDAO {
     public List<Tratta> getAll() {
         return em.createQuery("SELECT t FROM Tratta t", Tratta.class).getResultList();
     }
+
+    public void update(Tratta tratta) {
+        try {
+            EntityTransaction t = em.getTransaction();
+            t.begin();
+            em.merge(tratta);
+            t.commit();
+            System.out.println("Tratta aggiornata: " + tratta);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }

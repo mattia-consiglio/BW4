@@ -109,4 +109,19 @@ public class UtentiDAO {
             System.out.println(e.getMessage());
         }
     }
+    
+    public void update(Utente utente) {
+
+        try {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.merge(utente);
+            transaction.commit();
+            System.out.println("Utente " + utente + " aggiornato!");
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
     }
+
+}

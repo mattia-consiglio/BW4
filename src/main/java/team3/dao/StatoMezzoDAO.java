@@ -2,6 +2,7 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import team3.entities.Mezzo;
 import team3.entities.StatoMezzo;
@@ -57,5 +58,17 @@ public class StatoMezzoDAO {
         TypedQuery<StatoMezzo> query = em.createQuery("SELECT s FROM StatoMezzo s WHERE s.condizioneMezzo = CondizioneMezzo.IN_MANUTENZIONE AND s.mezzo = :mezzo ORDER BY s.dataInizio DESC", StatoMezzo.class);
         query.setParameter("mezzo", mezzo);
         return query.getResultList();
+    }
+
+    public void updateDataFine(StatoMezzo statoMezzo) {
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        Query query = em.createQuery("UPDATE StatoMezzo s SET s.dataFine = :dataFine WHERE s.id = :id");
+        query.setParameter("dataFine", statoMezzo.getDataFine());
+        query.setParameter("id", statoMezzo.getId());
+        if (query.executeUpdate() == 1) {
+            System.out.println("Stato aggiornato:" + statoMezzo);
+        } else System.out.println("Stato non aggiornato");
+        t.commit();
     }
 }

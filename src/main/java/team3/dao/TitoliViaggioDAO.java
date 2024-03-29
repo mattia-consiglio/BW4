@@ -140,10 +140,11 @@ public class TitoliViaggioDAO {
     public void updateBiglietto(Biglietto bigliettoModificato) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
-        Query query = em.createQuery("UPDATE Biglietto b SET b.dataVidimazione = :dataVidimazione, b.mezzo = :mezzo WHERE b.id = :id");
+        Query query = em.createQuery("UPDATE Biglietto b SET b.dataVidimazione = :dataVidimazione, b.mezzo = :mezzo, b.vidimato = :vidimato WHERE b.id = :id");
         query.setParameter("dataVidimazione", bigliettoModificato.getDataVidimazione());
         query.setParameter("mezzo", bigliettoModificato.getMezzo());
         query.setParameter("id", bigliettoModificato.getId());
+        query.setParameter("vidimato", bigliettoModificato.isVidimato());
         if (query.executeUpdate() == 1) {
             System.out.println("Biglietto vidimato con successo");
         } else {
