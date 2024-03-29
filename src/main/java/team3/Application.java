@@ -45,8 +45,7 @@ public class Application {
     };
     public static final Supplier<Emettitore> emettitoreSupplier = () -> {
         EmettitoreTipo tipologia = EmettitoreTipo.values()[new Random().nextInt(EmettitoreTipo.values().length - 1)]; //escudo il tipo ONLINE
-        EmettitoreStato stato = null;
-        if (tipologia == EmettitoreTipo.DISTRIBUTORE) {
+        EmettitoreStato stato = null;if (tipologia == EmettitoreTipo.DISTRIBUTORE) {
             stato = EmettitoreStato.values()[new Random().nextInt(EmettitoreStato.values().length)];
         }
         String city = faker.address().city();
