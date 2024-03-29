@@ -2,11 +2,11 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import team3.entities.Mezzo;
 import team3.entities.StatoMezzo;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class StatoMezzoDAO {
@@ -60,29 +60,15 @@ public class StatoMezzoDAO {
         return query.getResultList();
     }
 
-    public void updateDataFineById(long id, LocalDate newDataFine) {
-        try {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-
-            // Recupera lo stato mezzo con l'ID specificato
-            StatoMezzo statoMezzo = em.find(StatoMezzo.class, id);
-
-            if (statoMezzo != null) {
-                // Imposta il nuovo valore per il campo data fine
-                statoMezzo.setDataFine(newDataFine);
-
-                // Esegui l'aggiornamento effettivo utilizzando il metodo merge
-                em.merge(statoMezzo);
-
-                // Fai il commit della transazione
-                transaction.commit();
-                System.out.println("Data fine aggiornata per lo stato mezzo con ID " + id);
-            } else {
-                System.out.println("Stato mezzo con ID " + id + " non trovato");
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    public void updateDataFine(StatoMezzo statoMezzo) {
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        Query query = em.createQuery("UPDATE StatoMezzo s SET s.dataFine = :dataFine WHERE s.id = :id");
+        query.setParameter("dataFine", statoMezzo.getDataFine());
+        query.setParameter("id", statoMezzo.getId());
+        if (query.executeUpdate() == 1) {
+            System.out.println("Stato aggiornato:" + statoMezzo);
+        } else System.out.println("Stato non aggiornato");
+        t.commit();
     }
 }

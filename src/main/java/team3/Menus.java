@@ -272,7 +272,7 @@ public class Menus {
             System.out.println("4. Visualizza quantità biglietti vidimati in un periodo di tempo");
             System.out.println("5. Verifica che ci sia almento un abbonamento in corso si valità su una tessera");
             System.out.println("6. Aggiungi titolo di viaggio (biglietto/ abbonamento)");
-            System.out.println("7. Aggiungi emettitore (Rivenditore / Distributore)");
+            System.out.println("7. Aggiungi punto di emissione (Rivenditore / Distributore)");
             System.out.println("8. Aggiungi tessera");
             System.out.println("9. Aggiungi utente");
             System.out.println("10. Aggiungi mezzo");
@@ -280,6 +280,15 @@ public class Menus {
             System.out.println("12. Aggiungi tratta");
             System.out.println("13. Aggiungi tratta percorsa");
             System.out.println("14. Visualizza storico manutenzioni mezzo");
+            System.out.println("15. Rinnova tessera");
+            System.out.println("16. Pratica tessera persa");
+            System.out.println("17. Modifica utente");
+            System.out.println("18. Modifica stato mezzo");
+            System.out.println("19. Modifica tratta");
+            System.out.println("20. Modifica punto di emissione");
+            System.out.println("21. Contrassegna eliminato punto di emissione");
+            System.out.println("22. Elimina utente");
+            System.out.println("23. Elimina mezzo");
             System.out.println("0. Torna al menu pricipale");
             System.out.println("00. Esci dall'applicazione");
             System.out.println();
@@ -491,6 +500,105 @@ public class Menus {
                         System.out.println("Il mezzo scelto con id " + mezzo.getId() + " ha i seguenti stati di manutenzione:");
                         statiMezzo.forEach(System.out::println);
                     }
+                    pressEnterToContinue();
+                    break;
+                }
+                case "15": {
+                    Tessera tessera = Utilities.askAndVerifyList("Scegli id tessera", Application.tessereDAO.getValid(), "Tessera", true);
+                    assert tessera != null;
+                    tessera.rinnova();
+                    tessereDAO.rinnova(tessera);
+
+                    pressEnterToContinue();
+                    break;
+                }
+                case "16": {
+                    Tessera tesseraDaInvalidare = Utilities.askAndVerifyList("Scegli id tessera da invalidare", Application.tessereDAO.getValid(), "Tessera", true);
+                    assert tesseraDaInvalidare != null;
+                    tessereDAO.invalida(tesseraDaInvalidare);
+
+                    Tessera newTessera = new Tessera(tesseraDaInvalidare.getUtente(), LocalDate.now(), true);
+                    tessereDAO.save(newTessera);
+                    pressEnterToContinue();
+                    break;
+                }
+                case "17": {
+                    Utente utente = Utilities.askAndVerifyList("Scegli id utente da modificare", Application.utentiDAO.getAll(), "Utente", true);
+                    assert utente != null;
+                    System.out.println("Utente scelto");
+                    System.out.println(utente);
+                    System.out.println();
+                    utente.setNome(askAndVerifyString("Inserisci nuovo nome"));
+                    utente.setCognome(askAndVerifyString("Inserisci nuovo cognome"));
+                    utente.setDataNascita(askAndVerifyDate("Inserisci nuova data di nascita (aaaa-mm-gg)"));
+                    utente.setVia(askAndVerifyString("Inserisci nuova via"));
+                    utente.setCitta(askAndVerifyString("Inserisci nuova citta"));
+                    utente.setProvincia(askAndVerifyString("Inserisci nuova provincia"));
+                    utente.setCap(askAndVerifyString("Inserisci nuovo cap", 5));
+                    utente.setNazione(askAndVerifyString("Inserisci nuova nazione"));
+
+                    utentiDAO.update(utente);
+
+                    pressEnterToContinue();
+                    break;
+                }
+
+                case "18": {
+                    StatoMezzo statoMezzo = Utilities.askAndVerifyList("Scegli id stato mezzo da modificare", Application.statoMezzoDAO.getAll(), "Stato mezzo", true);
+                    assert statoMezzo != null;
+                    System.out.println("Stato mezzo scelto");
+                    System.out.println(statoMezzo);
+                    statoMezzo.setDataFine(askAndVerifyDate("Inserisci nuova data di fine (aaaa-mm-gg)"));
+                    statoMezzoDAO.updateDataFine(statoMezzo);
+                    pressEnterToContinue();
+                    break;
+                }
+
+                case "19": {
+                    Tratta tratta = Utilities.askAndVerifyList("Scegli id tratta da modificare", Application.tratteDAO.getAll(), "Tratta", true);
+                    assert tratta != null;
+                    System.out.println("Tratta scelta");
+                    System.out.println(tratta);
+                    tratta.setPuntoPartenza(askAndVerifyString("Inserisci nuovo punto di partenza"));
+                    tratta.setCapolinea(askAndVerifyString("Inserisci nuova capolinea"));
+                    tratta.setTempoMedioPercorrenza(askAndVerifyInt("Inserisci nuovo tempo medio di percorrenza in minuti"));
+                    tratteDAO.update(tratta);
+                    pressEnterToContinue();
+                    break;
+                }
+                case "20": {
+                    Emettitore emettitore = Utilities.askAndVerifyList("Scegli id emettitore da modificare", Application.emettitoriDAO.getAll(), "Emettitore", true);
+                    assert emettitore != null;
+                    System.out.println("Emettitore scelto");
+                    System.out.println(emettitore);
+                    emettitore.setNome(askAndVerifyString("Inserisci nuovo nome"));
+                    if (emettitore.getTipologia().equals(EmettitoreTipo.DISTRIBUTORE)) {
+                        emettitore.setStato(askAndVerifyEnum("Inserisci nuovo stato", EmettitoreStato.class));
+                    }
+                    emettitoriDAO.update(emettitore);
+
+                    pressEnterToContinue();
+                    break;
+                }
+                case "21": {
+                    Emettitore emettitore = Utilities.askAndVerifyList("Scegli id emettitore da contrassegnare eliminato", Application.emettitoriDAO.getAll(), "Emettitore", true);
+                    assert emettitore != null;
+
+                    pressEnterToContinue();
+                    break;
+                }
+                case "22": {
+                    Utente utente = Utilities.askAndVerifyList("Scegli id utente da eliminare", Application.utentiDAO.getAll(), "Utente", true);
+                    assert utente != null;
+
+                    pressEnterToContinue();
+                    break;
+                }
+
+                case "23": {
+                    Mezzo mezzo = Utilities.askAndVerifyList("Scegli id mezzo da contrassegnare eliminato", Application.mezziDAO.getAll(), "Mezzo", true);
+                    assert mezzo != null;
+
                     pressEnterToContinue();
                     break;
                 }

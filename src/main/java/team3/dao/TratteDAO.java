@@ -30,31 +30,15 @@ public class TratteDAO {
         return em.createQuery("SELECT t FROM Tratta t", Tratta.class).getResultList();
     }
 
-    public void updateTrattaById(long id, String newPuntoPartenza, String newCapolinea, int newTempoMedioPercorrenza) {
+    public void update(Tratta tratta) {
         try {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-
-            // Recupera la tratta con l'ID specificato
-            Tratta tratta = em.find(Tratta.class, id);
-
-            if (tratta != null) {
-                // Imposta i nuovi valori per i campi puntoPartenza, capolinea e tempoMedioPercorrenza
-                tratta.setPuntoPartenza(newPuntoPartenza);
-                tratta.setCapolinea(newCapolinea);
-                tratta.setTempoMedioPercorrenza(newTempoMedioPercorrenza);
-
-                // Esegui l'aggiornamento effettivo utilizzando il metodo merge
-                em.merge(tratta);
-
-                // Fai il commit della transazione
-                transaction.commit();
-                System.out.println("Punto di partenza, capolinea e tempo medio della tratta con ID " + id + " aggiornati");
-            } else {
-                System.out.println("Tratta con ID " + id + " non trovata");
-            }
+            EntityTransaction t = em.getTransaction();
+            t.begin();
+            em.merge(tratta);
+            t.commit();
+            System.out.println("Tratta aggiornata: " + tratta);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 }

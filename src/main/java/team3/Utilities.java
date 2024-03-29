@@ -163,7 +163,9 @@ public class Utilities {
     public static void pressEnterToContinue() {
         System.out.println();
         System.out.println("Premi INVIO per continuare...");
+        scanner.reset();
         scanner.nextLine();
-        System.out.println("Caricamento...");
+        scanner.reset();
+
     }
 }
