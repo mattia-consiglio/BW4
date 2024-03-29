@@ -53,6 +53,11 @@ public class EmettitoriDAO {
         return query.getResultList();
     }
 
+    public List<Emettitore> getDisponibili() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e WHERE e.disponibile = true", Emettitore.class);
+        return query.getResultList();
+    }
+
     public List<Emettitore> getAllDistributoriAttivi() {
         TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e WHERE e.tipologia = EmettitoreTipo.DISTRIBUTORE AND stato = EmettitoreStato.ATTIVO", Emettitore.class);
         return query.getResultList();

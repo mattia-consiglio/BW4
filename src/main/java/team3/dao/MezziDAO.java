@@ -47,10 +47,28 @@ public class MezziDAO {
 
     }
 
+    public void update(Mezzo mezzo) {
+        try {
+            EntityTransaction t = em.getTransaction();
+            t.begin();
+            em.merge(mezzo);
+            t.commit();
+            System.out.println("Mezzo aggiornato: " + mezzo);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     public List<Mezzo> getAll() {
         TypedQuery<Mezzo> query = em.createQuery("SELECT m FROM Mezzo m", Mezzo.class);
         return query.getResultList();
     }
+
+    public List<Mezzo> getDisponibili() {
+        TypedQuery<Mezzo> query = em.createQuery("SELECT m FROM Mezzo m WHERE m.disponibile = true", Mezzo.class);
+        return query.getResultList();
+    }
+
 
 }

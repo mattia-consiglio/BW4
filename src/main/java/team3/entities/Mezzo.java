@@ -14,6 +14,7 @@ public class Mezzo implements HasId {
     private int capienza;
     @Enumerated(EnumType.STRING)
     private TipoMezzo tipoMezzo;
+    boolean disponibile;
 
     // costruttore
     public Mezzo() {
@@ -22,6 +23,7 @@ public class Mezzo implements HasId {
     public Mezzo(int capienza, TipoMezzo tipoMezzo) {
         this.capienza = capienza;
         this.tipoMezzo = tipoMezzo;
+        this.disponibile = true;
     }
 
     // setter e getter
@@ -45,6 +47,14 @@ public class Mezzo implements HasId {
         this.tipoMezzo = tipoMezzo;
     }
 
+    public boolean isDisponibile() {
+        return disponibile;
+    }
+
+    public void setDisponibile(boolean disponibile) {
+        this.disponibile = disponibile;
+    }
+
     // toString
     @Override
     public String toString() {
@@ -52,6 +62,7 @@ public class Mezzo implements HasId {
                 "id=" + id +
                 ", capienza=" + capienza +
                 ", tipoMezzo=" + tipoMezzo +
+                ", disponibile=" + disponibile +
                 '}';
     }
 

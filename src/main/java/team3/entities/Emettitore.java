@@ -23,6 +23,7 @@ public class Emettitore implements HasId {
     private EmettitoreTipo tipologia;
     @Enumerated(value = EnumType.STRING)
     private EmettitoreStato stato;
+    boolean disponibile;
 
 
     public Emettitore() {
@@ -42,6 +43,7 @@ public class Emettitore implements HasId {
             throw new EmettitoreException("è necessario avere uno stato");
         }
         this.stato = stato;
+        this.disponibile = true;
     }
 
     public long getId() {
@@ -120,6 +122,14 @@ public class Emettitore implements HasId {
         this.stato = stato;
     }
 
+    public boolean isDisponibile() {
+        return disponibile;
+    }
+
+    public void setDisponibile(boolean disponibile) {
+        this.disponibile = disponibile;
+    }
+
     @Override
     public String toString() {
         return "Emettitore{" +
@@ -133,6 +143,7 @@ public class Emettitore implements HasId {
                 ", nazione='" + nazione + '\'' +
                 ", tipologia=" + tipologia +
                 ", stato=" + stato +
+                ", disponibile=" + disponibile +
                 '}';
     }
 

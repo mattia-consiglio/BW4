@@ -288,7 +288,7 @@ public class Menus {
             System.out.println("20. Modifica punto di emissione");
             System.out.println("21. Contrassegna eliminato punto di emissione");
             System.out.println("22. Elimina utente");
-            System.out.println("23. Elimina mezzo");
+            System.out.println("23. Contrassegna eliminato mezzo");
             System.out.println("0. Torna al menu pricipale");
             System.out.println("00. Esci dall'applicazione");
             System.out.println();
@@ -581,8 +581,10 @@ public class Menus {
                     break;
                 }
                 case "21": {
-                    Emettitore emettitore = Utilities.askAndVerifyList("Scegli id emettitore da contrassegnare eliminato", Application.emettitoriDAO.getAll(), "Emettitore", true);
+                    Emettitore emettitore = Utilities.askAndVerifyList("Scegli id emettitore da contrassegnare eliminato", Application.emettitoriDAO.getDisponibili(), "Emettitore", true);
                     assert emettitore != null;
+                    emettitore.setDisponibile(false);
+                    emettitoriDAO.update(emettitore);
 
                     pressEnterToContinue();
                     break;
@@ -596,8 +598,10 @@ public class Menus {
                 }
 
                 case "23": {
-                    Mezzo mezzo = Utilities.askAndVerifyList("Scegli id mezzo da contrassegnare eliminato", Application.mezziDAO.getAll(), "Mezzo", true);
+                    Mezzo mezzo = Utilities.askAndVerifyList("Scegli id mezzo da contrassegnare eliminato", Application.mezziDAO.getDisponibili(), "Mezzo", true);
                     assert mezzo != null;
+                    mezzo.setDisponibile(false);
+                    mezziDAO.update(mezzo);
 
                     pressEnterToContinue();
                     break;
