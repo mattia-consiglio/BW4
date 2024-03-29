@@ -288,7 +288,7 @@ public class Menus {
             System.out.println("20. Modifica punto di emissione");
             System.out.println("21. Contrassegna eliminato punto di emissione");
             System.out.println("22. Elimina utente");
-            System.out.println("23. Elimina mezzo");
+            System.out.println("23. Contrassegna eliminato mezzo");
             System.out.println("0. Torna al menu pricipale");
             System.out.println("00. Esci dall'applicazione");
             System.out.println();
@@ -591,6 +591,7 @@ public class Menus {
                     Utente utente = Utilities.askAndVerifyList("Scegli id utente da eliminare", Application.utentiDAO.getAll(), "Utente", true);
                     assert utente != null;
 
+                    
                     pressEnterToContinue();
                     break;
                 }
