@@ -93,7 +93,7 @@ public class Application {
 
     public static final TesseraSupplier tesserasupplier = (List<Utente> utenti) -> {
         Utente utente = utenti.get(new Random().nextInt(utenti.size()));
-        LocalDate dataEmissione = faker.date().past(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dataEmissione = faker.date().past(700, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         return new Tessera(utente, dataEmissione, faker.bool().bool());
     };

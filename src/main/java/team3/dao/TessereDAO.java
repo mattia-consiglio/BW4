@@ -2,6 +2,7 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import team3.entities.Tessera;
 import team3.entities.Utente;
@@ -61,6 +62,46 @@ public class TessereDAO {
     public List<Tessera> getByUser(Utente utente) {
         TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t WHERE t.utente = :utente", Tessera.class);
         query.setParameter("utente", utente);
+        return query.getResultList();
+    }
+
+    public void invalida(Tessera tessera) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        Query query = em.createQuery("UPDATE Tessera t SET t.validita = false WHERE t.id = :id");
+        query.setParameter("id", tessera.getId());
+
+        if (query.executeUpdate() == 1) {
+            System.out.println("Tessera invalidata con successo");
+        } else {
+            throw new RuntimeException("Errore durante l'invalidamento della tessera");
+        }
+        transaction.commit();
+    }
+
+    public void rinnova(Tessera tessera) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        Query query = em.createQuery("UPDATE Tessera t SET t.dataInizio = :dataInizio, t.dataFine = :dataFine WHERE t.id = :id");
+        query.setParameter("id", tessera.getId());
+        query.setParameter("dataInizio", tessera.getDataInizio());
+        query.setParameter("dataFine", tessera.getDataFine());
+
+        if (query.executeUpdate() == 1) {
+            System.out.println("Tessera invalidata con successo");
+        } else {
+            throw new RuntimeException("Errore durante l'invalidamento della tessera");
+        }
+        transaction.commit();
+    }
+
+    public List<Tessera> getValidEpired() {
+        TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t WHERE t.validita = true AND t.dataScadenza < CURRENT_DATE ORDER BY t.dataFine", Tessera.class);
+        return query.getResultList();
+    }
+
+    public List<Tessera> getValid() {
+        TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t WHERE t.validita = true ORDER BY t.dataFine", Tessera.class);
         return query.getResultList();
     }
 }

@@ -18,6 +18,7 @@ public class MezzoTratta implements HasId {
     private Mezzo mezzo;
     @ManyToOne
     @JoinColumn(name = "id_tratta")
+
     private Tratta tratta;
 
     @Column(name = "tempo_percorrenza")
