@@ -62,6 +62,7 @@ public class Mezzo implements HasId {
                 "id=" + id +
                 ", capienza=" + capienza +
                 ", tipoMezzo=" + tipoMezzo +
+                ", disponibile=" + disponibile +
                 '}';
     }
 

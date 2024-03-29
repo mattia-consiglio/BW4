@@ -143,6 +143,7 @@ public class Emettitore implements HasId {
                 ", nazione='" + nazione + '\'' +
                 ", tipologia=" + tipologia +
                 ", stato=" + stato +
+                ", disponibile=" + disponibile +
                 '}';
     }
 

@@ -581,8 +581,10 @@ public class Menus {
                     break;
                 }
                 case "21": {
-                    Emettitore emettitore = Utilities.askAndVerifyList("Scegli id emettitore da contrassegnare eliminato", Application.emettitoriDAO.getAll(), "Emettitore", true);
+                    Emettitore emettitore = Utilities.askAndVerifyList("Scegli id emettitore da contrassegnare eliminato", Application.emettitoriDAO.getDisponibili(), "Emettitore", true);
                     assert emettitore != null;
+                    emettitore.setDisponibile(false);
+                    emettitoriDAO.update(emettitore);
 
                     pressEnterToContinue();
                     break;
@@ -596,8 +598,10 @@ public class Menus {
                 }
 
                 case "23": {
-                    Mezzo mezzo = Utilities.askAndVerifyList("Scegli id mezzo da contrassegnare eliminato", Application.mezziDAO.getAll(), "Mezzo", true);
+                    Mezzo mezzo = Utilities.askAndVerifyList("Scegli id mezzo da contrassegnare eliminato", Application.mezziDAO.getDisponibili(), "Mezzo", true);
                     assert mezzo != null;
+                    mezzo.setDisponibile(false);
+                    mezziDAO.update(mezzo);
 
                     pressEnterToContinue();
                     break;
