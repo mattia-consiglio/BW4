@@ -7,10 +7,10 @@ import team3.entities.Emettitore;
 
 import java.util.List;
 
-public class EmettitoreDAO {
+public class EmettitoriDAO {
     private EntityManager em;
 
-    public EmettitoreDAO(EntityManager em) {
+    public EmettitoriDAO(EntityManager em) {
         this.em = em;
     }
 
@@ -20,7 +20,7 @@ public class EmettitoreDAO {
             t.begin();
             em.persist(emettitore);
             t.commit();
-            System.out.println("Emettitore inserito");
+            System.out.println("Emettitore inserito: " + emettitore);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -47,13 +47,18 @@ public class EmettitoreDAO {
         }
     }
 
-    public List<Emettitore> getFirst() {
-        TypedQuery<Emettitore> query = em.createQuery("SELECT e.id FROM Emettitore e ORDER BY e.id LIMIT 1", Emettitore.class);
+    public List<Emettitore> getAll() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e", Emettitore.class);
         return query.getResultList();
     }
 
-    public List<Emettitore> getAll() {
-        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e", Emettitore.class);
+    public List<Emettitore> getAllDistributoriAttivi() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e WHERE e.tipologia = EmettitoreTipo.DISTRIBUTORE AND stato = EmettitoreStato.ATTIVO", Emettitore.class);
+        return query.getResultList();
+    }
+
+    public List<Emettitore> getAllRivenditori() {
+        TypedQuery<Emettitore> query = em.createQuery("SELECT e FROM Emettitore e WHERE e.tipologia = EmettitoreTipo.RIVENDITORE", Emettitore.class);
         return query.getResultList();
     }
 }

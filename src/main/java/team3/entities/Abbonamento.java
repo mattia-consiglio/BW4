@@ -1,27 +1,75 @@
 package team3.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Abbonamento extends TitoloViaggio {
-    private LocalDate dataInizio;
     private LocalDate dataFine;
     @Enumerated(value = EnumType.STRING)
     private TipoAbbonamento tipoAbbonamento;
+    @ManyToOne
+    @JoinColumn(name = "id_tessera")
+    private Tessera tessera;
 
-    public Abbonamento(LocalDate dataEmissione, Emettitore emettitore, LocalDate dataInizio, LocalDate dataFine, TipoAbbonamento tipoAbbonamento, Tessera tessera) {
+    public Abbonamento() {
+    }
+
+    public Abbonamento(LocalDate dataEmissione, Emettitore emettitore, TipoAbbonamento tipoAbbonamento, Tessera tessera) {
         super(dataEmissione, emettitore);
-        this.dataInizio = dataInizio;
+        this.dataEmissione = dataEmissione;
         this.tipoAbbonamento = tipoAbbonamento;
-        if (this.tipoAbbonamento.equals(TipoAbbonamento.SETTIMANALE)) {
-            this.dataFine = this.dataInizio.plusDays(7);
+        if (tipoAbbonamento.equals(TipoAbbonamento.SETTIMANALE)) {
+            this.dataFine = this.dataEmissione.plusDays(7);
         } else {
-            this.dataFine = this.dataInizio.plusDays(30);
+            this.dataFine = this.dataEmissione.plusDays(30);
         }
         this.tessera = tessera;
     }
+
+    public LocalDate getDataFine() {
+        return dataFine;
+    }
+
+    public void setDataFine(LocalDate dataFine) {
+        this.dataFine = dataFine;
+    }
+
+    public TipoAbbonamento getTipoAbbonamento() {
+        return tipoAbbonamento;
+    }
+
+    public void setTipoAbbonamento(TipoAbbonamento tipoAbbonamento) {
+        this.tipoAbbonamento = tipoAbbonamento;
+    }
+
+    public Tessera getTessera() {
+        return tessera;
+    }
+
+    public void setTessera(Tessera tessera) {
+        this.tessera = tessera;
+    }
+
+    @Override
+    public String toString() {
+        return "Abbonamento{" +
+                "id=" + id +
+                ", dataEmissione=" + dataEmissione +
+                ", dataFine=" + dataFine +
+                ", tipoAbbonamento=" + tipoAbbonamento +
+                ", tessera=" + tessera +
+                ", emettitore=" + emettitore +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Abbonamento that)) return false;
+        return Objects.equals(dataFine, that.dataFine) && tipoAbbonamento == that.tipoAbbonamento && Objects.equals(tessera, that.tessera);
+    }
+
 }

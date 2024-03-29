@@ -2,8 +2,12 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import team3.entities.Tessera;
+import team3.entities.Utente;
 import team3.exceptions.NotFoundException;
+
+import java.util.List;
 
 public class TessereDAO {
     private final EntityManager em;
@@ -12,8 +16,8 @@ public class TessereDAO {
         this.em = em;
     }
 
-    public void save (Tessera tessera) {
-        try{
+    public void save(Tessera tessera) {
+        try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.persist(tessera);
@@ -26,18 +30,18 @@ public class TessereDAO {
 
     public Tessera findById(long id) {
         Tessera tessera = em.find(Tessera.class, id);
-        if(tessera == null) {
+        if (tessera == null) {
             throw new NotFoundException(id);
         }
         return tessera;
     }
 
-    public void deleteById (long id) {
+    public void deleteById(long id) {
         try {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             Tessera found = em.find(Tessera.class, id);
-            if(found != null){
+            if (found != null) {
                 em.remove(found);
                 transaction.commit();
                 System.out.println("Tessera eliminata");
@@ -47,5 +51,16 @@ public class TessereDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public List<Tessera> getAll() {
+        TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t", Tessera.class);
+        return query.getResultList();
+    }
+
+    public List<Tessera> getByUser(Utente utente) {
+        TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t WHERE t.utente = :utente", Tessera.class);
+        query.setParameter("utente", utente);
+        return query.getResultList();
     }
 }

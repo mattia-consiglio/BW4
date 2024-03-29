@@ -1,13 +1,12 @@
 // @author <FRANCESCO>
 
 package team3.entities;
-import jakarta.persistence.*;
 
-import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mezzi")
-public class Mezzo {
+public class Mezzo implements HasId {
     // attributi
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,7 +16,9 @@ public class Mezzo {
     private TipoMezzo tipoMezzo;
 
     // costruttore
-    public Mezzo() {}
+    public Mezzo() {
+    }
+
     public Mezzo(int capienza, TipoMezzo tipoMezzo) {
         this.capienza = capienza;
         this.tipoMezzo = tipoMezzo;
@@ -52,6 +53,13 @@ public class Mezzo {
                 ", capienza=" + capienza +
                 ", tipoMezzo=" + tipoMezzo +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Mezzo mezzo)) return false;
+        return id == mezzo.id && capienza == mezzo.capienza && tipoMezzo == mezzo.tipoMezzo;
     }
 
 }

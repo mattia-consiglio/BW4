@@ -3,9 +3,11 @@ package team3.entities;
 import jakarta.persistence.*;
 import team3.exceptions.EmettitoreException;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "emettitori")
-public class Emettitore {
+public class Emettitore implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -18,7 +20,7 @@ public class Emettitore {
     private String cap;
     private String nazione;
     @Enumerated(value = EnumType.STRING)
-    private EmettitoreEnum tipologia;
+    private EmettitoreTipo tipologia;
     @Enumerated(value = EnumType.STRING)
     private EmettitoreStato stato;
 
@@ -27,7 +29,7 @@ public class Emettitore {
     }
 
 
-    public Emettitore(String nome, String via, String civico, String provincia, String citta, String cap, String nazione, EmettitoreEnum tipologia, EmettitoreStato stato) throws EmettitoreException {
+    public Emettitore(String nome, String via, String civico, String provincia, String citta, String cap, String nazione, EmettitoreTipo tipologia, EmettitoreStato stato) throws EmettitoreException {
         this.nome = nome;
         this.via = via;
         this.civico = civico;
@@ -36,7 +38,7 @@ public class Emettitore {
         this.cap = cap;
         this.nazione = nazione;
         this.tipologia = tipologia;
-        if (tipologia == EmettitoreEnum.DISTRIBUTORE && stato == null) {
+        if (tipologia == EmettitoreTipo.DISTRIBUTORE && stato == null) {
             throw new EmettitoreException("è necessario avere uno stato");
         }
         this.stato = stato;
@@ -78,7 +80,7 @@ public class Emettitore {
         return nazione;
     }
 
-    public EmettitoreEnum getTipologia() {
+    public EmettitoreTipo getTipologia() {
         return tipologia;
     }
 
@@ -110,11 +112,35 @@ public class Emettitore {
         this.nazione = nazione;
     }
 
-    public void setTipologia(EmettitoreEnum tipologia) {
+    public void setTipologia(EmettitoreTipo tipologia) {
         this.tipologia = tipologia;
     }
 
     public void setStato(EmettitoreStato stato) {
         this.stato = stato;
     }
+
+    @Override
+    public String toString() {
+        return "Emettitore{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", via='" + via + '\'' +
+                ", civico='" + civico + '\'' +
+                ", provincia='" + provincia + '\'' +
+                ", citta='" + citta + '\'' +
+                ", cap='" + cap + '\'' +
+                ", nazione='" + nazione + '\'' +
+                ", tipologia=" + tipologia +
+                ", stato=" + stato +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Emettitore that)) return false;
+        return id == that.id && Objects.equals(nome, that.nome) && Objects.equals(via, that.via) && Objects.equals(civico, that.civico) && Objects.equals(provincia, that.provincia) && Objects.equals(citta, that.citta) && Objects.equals(cap, that.cap) && Objects.equals(nazione, that.nazione) && tipologia == that.tipologia && stato == that.stato;
+    }
+
 }

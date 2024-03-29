@@ -2,12 +2,14 @@ package team3.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "tratte")
-public class Tratta {
+public class Tratta implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private long id;
 
     @Column(name = "punto_partenza")
     private String puntoPartenza;
@@ -20,7 +22,6 @@ public class Tratta {
     public Tratta() {
     }
 
-    ;
 
     public Tratta(String puntoPartenza, String capolinea, int tempoMedioPercorrenza) {
         this.puntoPartenza = puntoPartenza;
@@ -28,7 +29,7 @@ public class Tratta {
         this.tempoMedioPercorrenza = tempoMedioPercorrenza;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -71,4 +72,10 @@ public class Tratta {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tratta tratta)) return false;
+        return id == tratta.id && tempoMedioPercorrenza == tratta.tempoMedioPercorrenza && Objects.equals(puntoPartenza, tratta.puntoPartenza) && Objects.equals(capolinea, tratta.capolinea);
+    }
 }

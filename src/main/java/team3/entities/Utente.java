@@ -1,13 +1,15 @@
 package team3.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
-public class Utente {
+@Table(name = "utenti")
+public class Utente implements HasId {
 
     //LISTA ATTRIBUTI:
     @Id
@@ -21,11 +23,15 @@ public class Utente {
     private String città;
     private String cap;
     private String nazione;
+    @OneToMany(mappedBy = "utente")
+    private List<Tessera> tessere = new ArrayList<>();
+
 
     //COSTRUTTORI:
-    public Utente() {}
+    public Utente() {
+    }
 
-    public Utente( String nome, String cognome, LocalDate dataNascita, String via, String provincica, String città, String cap, String nazione) {
+    public Utente(String nome, String cognome, LocalDate dataNascita, String via, String provincica, String città, String cap, String nazione) {
         this.nome = nome;
         this.cognome = cognome;
         this.dataNascita = dataNascita;
@@ -34,5 +40,95 @@ public class Utente {
         this.città = città;
         this.cap = cap;
         this.nazione = nazione;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public LocalDate getDataNascita() {
+        return dataNascita;
+    }
+
+    public void setDataNascita(LocalDate dataNascita) {
+        this.dataNascita = dataNascita;
+    }
+
+    public String getVia() {
+        return via;
+    }
+
+    public void setVia(String via) {
+        this.via = via;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getCittà() {
+        return città;
+    }
+
+    public void setCittà(String città) {
+        this.città = città;
+    }
+
+    public String getCap() {
+        return cap;
+    }
+
+    public void setCap(String cap) {
+        this.cap = cap;
+    }
+
+    public String getNazione() {
+        return nazione;
+    }
+
+    public void setNazione(String nazione) {
+        this.nazione = nazione;
+    }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", dataNascita=" + dataNascita +
+                ", via='" + via + '\'' +
+                ", provincia='" + provincia + '\'' +
+                ", città='" + città + '\'' +
+                ", cap='" + cap + '\'' +
+                ", nazione='" + nazione + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Utente utente)) return false;
+        return id == utente.id && Objects.equals(nome, utente.nome) && Objects.equals(cognome, utente.cognome) && Objects.equals(dataNascita, utente.dataNascita) && Objects.equals(via, utente.via) && Objects.equals(provincia, utente.provincia) && Objects.equals(città, utente.città) && Objects.equals(cap, utente.cap) && Objects.equals(nazione, utente.nazione) && Objects.equals(tessere, utente.tessere);
     }
 }
