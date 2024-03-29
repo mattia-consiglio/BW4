@@ -6,6 +6,7 @@ import jakarta.persistence.TypedQuery;
 import team3.entities.Mezzo;
 import team3.entities.StatoMezzo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class StatoMezzoDAO {
@@ -57,5 +58,31 @@ public class StatoMezzoDAO {
         TypedQuery<StatoMezzo> query = em.createQuery("SELECT s FROM StatoMezzo s WHERE s.condizioneMezzo = CondizioneMezzo.IN_MANUTENZIONE AND s.mezzo = :mezzo ORDER BY s.dataInizio DESC", StatoMezzo.class);
         query.setParameter("mezzo", mezzo);
         return query.getResultList();
+    }
+
+    public void updateDataFineById(long id, LocalDate newDataFine) {
+        try {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+
+            // Recupera lo stato mezzo con l'ID specificato
+            StatoMezzo statoMezzo = em.find(StatoMezzo.class, id);
+
+            if (statoMezzo != null) {
+                // Imposta il nuovo valore per il campo data fine
+                statoMezzo.setDataFine(newDataFine);
+
+                // Esegui l'aggiornamento effettivo utilizzando il metodo merge
+                em.merge(statoMezzo);
+
+                // Fai il commit della transazione
+                transaction.commit();
+                System.out.println("Data fine aggiornata per lo stato mezzo con ID " + id);
+            } else {
+                System.out.println("Stato mezzo con ID " + id + " non trovato");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
