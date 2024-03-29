@@ -2,7 +2,10 @@ package team3.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import team3.entities.Abbonamento;
+import team3.entities.Biglietto;
 import team3.entities.Tessera;
 import team3.entities.Utente;
 import team3.exceptions.NotFoundException;
@@ -72,6 +75,41 @@ public class UtentiDAO {
         return query.getSingleResult();
     }
 
+    // metodo per eliminare un utente ma che tiene in memoria tutti gli oggetti ad esso associati
+    public void cancellaUtenteTranneSuoiOggetti(Utente utente) {
+        try {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            Utente found = em.find(Utente.class, utente.getId());
+            if (found != null) {
+                // abbonamento
+                Query queryAbbonamenti = em.createQuery("UPDATE Abbonamento a SET a.tessera = null WHERE a.tessera.utente.id = :id");
+                queryAbbonamenti.setParameter("id", utente.getId());
+                queryAbbonamenti.executeUpdate();
+
+                // tessera
+                Query queryTessere = em.createQuery("UPDATE Tessera t SET t.utente = null WHERE t.utente.id = :id");
+                queryTessere.setParameter("id", utente.getId());
+                queryTessere.executeUpdate();
+
+                // biglietto online
+                Query queryBiglietto = em.createQuery("UPDATE Biglietto b SET b.utente = null WHERE b.utente.id = :id");
+                queryBiglietto.setParameter("id", utente.getId());
+                queryBiglietto.executeUpdate();
+
+                // eliminiamo utente
+                em.remove(found);
+
+                transaction.commit();
+                System.out.println("Utente eliminato e tutti gli oggetti ad esso associati restano salvati nello storico");
+            } else {
+                System.out.println("Utente non trovato");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public void update(Utente utente) {
 
         try {

@@ -590,8 +590,7 @@ public class Menus {
                 case "22": {
                     Utente utente = Utilities.askAndVerifyList("Scegli id utente da eliminare", Application.utentiDAO.getAll(), "Utente", true);
                     assert utente != null;
-
-                    
+                    utentiDAO.cancellaUtenteTranneSuoiOggetti(utente);
                     pressEnterToContinue();
                     break;
                 }

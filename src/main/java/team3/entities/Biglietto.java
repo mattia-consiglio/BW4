@@ -62,6 +62,14 @@ public class Biglietto extends TitoloViaggio {
         this.mezzo = mezzo;
     }
 
+    public Utente getUtente() {
+        return utente;
+    }
+
+    public void setUtente(Utente utente) {
+        this.utente = utente;
+    }
+
     @Override
     public String toString() {
         return "Biglietto{" +
